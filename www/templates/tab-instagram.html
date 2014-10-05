@@ -1,0 +1,27 @@
+<ion-view>
+	<div class="tabs-striped tabs-top tabs-background-energized tabs-light">
+	    <div class="tabs">
+	      <a class="tab-item" href="#/tab/dash/friends/account">
+	        <i class="icon ion-spoon"></i>
+	      </a>
+	      <a class="tab-item active" href="#/tab/dash/friends/instagram">
+	        <i class="icon ion-social-instagram"></i>
+	      </a>
+	      <a class="tab-item" href="#/tab/dash/friends/twitter">
+	        <i class="icon ion-social-twitter"></i>
+	      </a>
+	    </div>
+  	</div>
+	<ion-content class="padding" style="padding-top:70px">
+		<div class="card" ng-repeat="image in instagram.images">
+		    <div>
+		        <div style="text-align:center;">
+		            <img src="{{image.img.src}}"/>
+		        </div>
+		        <div class="item item-text-wrap">
+		            {{image.img.alt}}
+		        </div>
+		    </div>
+		</div>
+	</ion-content>
+</ion-view>

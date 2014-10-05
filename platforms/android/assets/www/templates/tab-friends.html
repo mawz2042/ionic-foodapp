@@ -1,0 +1,43 @@
+<ion-view>
+  	<ion-content class="has-footer">
+        <h4 style="margin: 15px;">
+            {{demandTitle}}:
+        </h4>
+
+        <div class="card">
+            <div class="item item-text-wrap">
+                <div>
+                    <div class="padding-vertical">
+                        <div style="display:inline-block; width:49%;"><b>{{business.name}}</b></div>
+                        <div style="display:inline-block; text-align:right; width:49%;">{{business.categories[0][0]}}</div>
+                    </div>
+                    <div class="padding-vertical">
+                        <div style="display:inline-block; width:49%;">{{business.rating}} star rating</div>
+                        <div style="display:inline-block; text-align:right; width:49%;">{{business.review_count}} reviews</div>
+                    </div>
+                </div>
+
+                <div class="padding-vertical">
+                    <img style="padding: 0; margin: 0; width:100%; height: auto;" src="{{ (business.image_url).replace('ms.jpg', 'l.jpg') }}" />
+                </div>
+
+                <div class="padding-vertical">
+                    <div style="font-weight: bold;">
+                        {{business.location.display_address[0]}}</small>
+                        <br/>
+                        {{business.location.display_address[1]}}
+                        <br/>
+                        {{business.location.display_address[2]}}
+                        <br/>
+                        {{business.location.display_address[3]}}
+                    </div>
+                </div>
+            </div>
+        </div>
+ 	</ion-content>
+
+    <div class="bar bar-footer bar-energized">
+        <button ng-click="restaurantSubmit()" class="button button-icon icon ion-checkmark-round"></button>
+        <button ng-click="cancel()" class="button button-icon icon ion-close-round"></button>
+    </div>
+</ion-view>
