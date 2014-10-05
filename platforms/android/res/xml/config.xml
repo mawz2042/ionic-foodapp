@@ -10,12 +10,13 @@
     </feature>
     <name>Food App</name>
     <description>
-    An Ionic Framework and Cordova project.
+    Personal assistant food application.
   </description>
     <author email="alex44nguyen@gmail.com" href="http://alexandernguyen.gamehub.ca/">
     Alexander Nguyen
   </author>
     <content src="index.html" />
+    <access origin="http://www.gamehub.ca" />
     <access origin="*" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />

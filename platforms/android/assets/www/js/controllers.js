@@ -79,7 +79,7 @@ angular.module('starter.controllers', [])
         });
     };
 
-    $scope.hide = function(){
+    $scope.hide = function() {
         $ionicLoading.hide();
     };
 
@@ -94,9 +94,9 @@ angular.module('starter.controllers', [])
         $rootScope.ranDemandTitle();
         $rootScope.business = $rootScope.businesses.businesses[$scope.counter];
         console.log($rootScope.business);
-    }
+    };
 
-     $scope.restaurantSubmit = function() {
+    $scope.restaurantSubmit = function() {
         $rootScope.searchCriteria['counter'] = $scope.counter;
         $scope.show();
         $http({
@@ -139,11 +139,7 @@ angular.module('starter.controllers', [])
         }).error(function(data){
             console.log("there is an error");
         });
-    }
-})
-
-.controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-  $scope.friend = Friends.get($stateParams.friendId);
+    };
 })
 
 .controller('AccountCtrl', function($scope) {

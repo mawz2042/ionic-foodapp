@@ -1,2 +1,2 @@
-C:\xampp\htdocs\ionicapp\platforms\android\ant-build\AndroidManifest.xml : \
-C:\xampp\htdocs\ionicapp\platforms\android\AndroidManifest.xml \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\ant-build\AndroidManifest.xml : \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\AndroidManifest.xml \
