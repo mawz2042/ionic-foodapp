@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic.contrib.ui.cards'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -19,6 +19,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       StatusBar.styleDefault();
     }
   });
+})
+
+.directive('noScroll', function($document) {
+
+  return {
+    restrict: 'A',
+    link: function($scope, $element, $attr) {
+
+      $document.on('touchmove', function(e) {
+        e.preventDefault();
+      });
+    }
+  }
 })
 
 .config(function($stateProvider, $urlRouterProvider) {

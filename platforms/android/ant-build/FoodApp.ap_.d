@@ -40,11 +40,18 @@ C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\php \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\plugins \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\templates \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\css\style.css \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\css\tabSlideBox.css \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\ionic.png \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\pic.png \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\pic2.png \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\pic3.png \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\pic4.png \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\js\app.js \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\js\controllers.js \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\js\services.js \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic.swipecards.js \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\tabSlideBox.js \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic\css \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic\fonts \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic\js \
@@ -112,6 +119,9 @@ C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic\scss\ionico
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic\scss\ionicons\_ionicons-font.scss \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic\scss\ionicons\_ionicons-icons.scss \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\lib\ionic\scss\ionicons\_ionicons-variables.scss \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\php\foursquare.php \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\php\foursquareDetails.php \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\php\foursquarePhotoDetails.php \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\php\lib \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\php\photoDetails.php \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\php\restaurantDetails.php \
@@ -128,6 +138,7 @@ C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\plugins\com.ionic.key
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\plugins\org.apache.cordova.device\www \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\plugins\org.apache.cordova.device\www\device.js \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\templates\friend-detail.html \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\templates\popup-cuisines.html \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\templates\tab-account.html \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\templates\tab-dash.html \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\templates\tab-friends.html \

@@ -13,13 +13,10 @@
 	    </div>
   	</div>
 	<ion-content class="padding" style="padding-top:70px">
-		<div class="card" ng-repeat="image in instagram.images">
+		<div class="card" ng-repeat="image in instagram.response.photos.items">
 		    <div>
 		        <div style="text-align:center;">
-		            <img src="{{image.img.src}}"/>
-		        </div>
-		        <div class="item item-text-wrap">
-		            {{image.img.alt}}
+		            <img src="{{image.prefix}}300x500{{image.suffix}}"/>
 		        </div>
 		    </div>
 		</div>

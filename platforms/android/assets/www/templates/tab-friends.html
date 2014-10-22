@@ -1,43 +1,59 @@
-<ion-view>
-  	<ion-content class="has-footer">
+<ion-view >
+  	<ion-content>
         <h4 style="margin: 15px;">
             {{demandTitle}}:
         </h4>
 
-        <div class="card">
-            <div class="item item-text-wrap">
-                <div>
-                    <div class="padding-vertical">
-                        <div style="display:inline-block; width:49%;"><b>{{business.name}}</b></div>
-                        <div style="display:inline-block; text-align:right; width:49%;">{{business.categories[0][0]}}</div>
-                    </div>
-                    <div class="padding-vertical">
-                        <div style="display:inline-block; width:49%;">{{business.rating}} star rating</div>
-                        <div style="display:inline-block; text-align:right; width:49%;">{{business.review_count}} reviews</div>
-                    </div>
-                </div>
-
-                <div class="padding-vertical">
-                    <img style="padding: 0; margin: 0; width:100%; height: auto;" src="{{ (business.image_url).replace('ms.jpg', 'l.jpg') }}" />
-                </div>
-
-                <div class="padding-vertical">
-                    <div style="font-weight: bold;">
-                        {{business.location.display_address[0]}}</small>
-                        <br/>
-                        {{business.location.display_address[1]}}
-                        <br/>
-                        {{business.location.display_address[2]}}
-                        <br/>
-                        {{business.location.display_address[3]}}
+        <swipe-cards>
+          <swipe-card on-card-swipe="cardSwiped()" id="start-card">
+            <div class="card">
+                <div class="item item-text-wrap">
+                    <div style="height:300px;">
+                        Swipe down for a new card
                     </div>
                 </div>
             </div>
-        </div>
- 	</ion-content>
+          </swipe-card>
+          <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
+            <div class="card">
 
-    <div class="bar bar-footer bar-energized">
-        <button ng-click="restaurantSubmit()" class="button button-icon icon ion-checkmark-round"></button>
-        <button ng-click="cancel()" class="button button-icon icon ion-close-round"></button>
-    </div>
-</ion-view>
+                <div class="item item-text-wrap">
+                    <div>
+                        <div class="padding-vertical">
+                            <div style="display:inline-block; width:49%;vertical-align:top;"><b>{{card.name}}</b></div>
+                            <div style="display:inline-block; text-align:right; width:49%;">{{card.categories[0].name}}</div>
+                        </div>
+                        <div class="padding-vertical">
+                            <div style="display:inline-block; width:49%;">{{card.rating}}/10</div>
+                            <div style="display:inline-block; text-align:right; width:49%;">{{card.stats.checkinsCount}} Checkins</div>
+                        </div>
+                    </div>
+
+                    <div class="padding-vertical">
+                        <img style="padding: 0; margin: 0;" src="{{ card.photos.groups[0].items[0].prefix }}300x300{{ card.photos.groups[0].items[0].suffix }}" />
+                    </div>
+
+                    <div class="padding-vertical">
+                        <div style="float:right;">
+                            <button ng-click="restaurantSubmit()" class="button button-icon icon ion-checkmark-round"></button>
+                        </div>
+                        <div style="font-weight: bold; display:inline-block;">
+                            {{card.location.address}}
+                            <br/>
+                            {{card.location.city}}, {{card.location.state}}  {{card.location.postalCode}}
+                            <br/>
+                            {{card.location.country}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </swipe-card>
+
+        </swipe-cards>
+
+    <!-- <div class="bar bar-footer bar-energized">
+        <button ng-click="goAway()" class="button button-icon icon ion-checkmark-round"></button>
+        <button ng-click="goAway()" class="button button-icon icon ion-close-round"></button>
+    </div> -->
+    <ion-content>
+</ion-view> 

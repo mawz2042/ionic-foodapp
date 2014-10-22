@@ -1,111 +1,102 @@
 <ion-view>
-	<div class="tabs-striped tabs-top tabs-background-energized tabs-light">
-	    <div class="tabs">
-	      <a class="tab-item active" href="#/tab/dash/friends/account">
-	        <i class="icon ion-spoon"></i>
-	      </a>
-	      <a class="tab-item" href="#/tab/dash/friends/instagram">
-	        <i class="icon ion-social-instagram"></i>
-	      </a>
-	      <a class="tab-item" href="#/tab/dash/friends/twitter">
-	        <i class="icon ion-social-twitter"></i>
-	      </a>
-	    </div>
-  	</div>
-	<ion-content class="padding" style="padding-top:70px">
-		<div>
-		    <div class="card">
-		        <div class="item item-text-wrap">
-		            <div class="padding-vertical">
-		                <b>{{business.name}}</b>
-		            </div>
-		            <!-- <div>
-		                <div style="display:inline-block; width:49%;">{{business.rating}} star rating</div>
-		                <div style="display:inline-block; text-align:right; width:49%;">{{business.info[0].expensive}}</div>
-		            </div> -->
-		            <div class="padding-vertical">
-		                <div style="display:inline-block; width:49%;">{{business.rating}} star rating</div>
-		                <div style="display:inline-block; text-align:right; width:49%;">{{business.categories[0][0]}}</div>
-		            </div>
-		        </div>
-		    </div>
-		    <div class="card">
-		        <div style="text-align:center;">
-		            <!-- <div>{{ business.info[0].status }}</div>
-		            <br/>
-		            <div>Today: {{ business.info[0].hours }}</div> -->
-		            <img src="{{ (business.image_url).replace('ms.jpg', 'l.jpg') }}" />
-		        </div>
-		    </div>
-		    <div class="card">
-		        <!-- <div>
-		            <img src="{{ business.info[0].map.src }}">
-		        </div> -->
-		        <div class="item item-text-wrap">
-		            <div style="font-weight: bold;">
-		                {{business.location.display_address[0]}}
-		                <br/>
-		                {{business.location.display_address[1]}}
-		                <br/>
-		                {{business.location.display_address[2]}}
-		                <br/>
-		                {{business.location.display_address[3]}}
-		            </div>
-		        </div>
-		    </div>
-		    <!-- <div class="card">
-		        <div style="margin-bottom:0;">
-		            <h4>
-		                Details:
-		            </h4>
-		            <div ng-repeat="detail in business.details">
-		                {{detail.question}}: {{detail.answer}}
-		            </div>
-		        </div>
-		    </div> -->
-		    <div class="card">
-		        <div class="item item-text-wrap">
-		            <div style="padding-bottom: 15px; border-bottom: 1px solid #DDD;">
-		            	<i class="ion-android-location"></i> 
-		            	Directions 
-		        	</div>
-		            <div style="padding: 15px 0; border-bottom: 1px solid #DDD;">
-		            	<i class="ion-android-call"></i> 
-		            	{{business.display_phone}}
-		            </div>
-		            <!-- <div style="padding: 15px 0; border-bottom: 1px solid #DDD;"> 
-		                <a href="http://{{ business.info[0].website.text }}" style="padding: 0;color:#444;">
-		                    <i class="ion-android-earth"></i>
-		                    {{ business.info[0].website.text }}
-		                </a>
-		            </div> -->
-		            <div style="padding-top: 15px;">
-		            	<i class=""></i> 
-		            	Make a Reservation
-		            </div>
-		        </div>
-		    </div>
-		    <div class="card">
-		        <div class="item item-text-wrap">
-		            <h3>
-		                {{business.review_count}} Reviews
-		            </h3>
-		            <div>
-		                <div>
-		                    <div style="display:inline-block; width: 49%;">
-		                        {{ business.reviews[0].user.name }}
-		                    </div>
-		                    <div style="display:inline-block; width:49%; text-align:right;">
-		                        <b>{{ business.reviews[0].rating }}/5</b>
-		                    </div>
-		                </div>
-		                <br/>
-		                <div>
-		                    {{ business.reviews[0].excerpt }}
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-	</ion-content>
+    <div class="tabs-striped tabs-top tabs-background-energized tabs-light">
+        <div class="tabs">
+          <a class="tab-item active" href="#/tab/dash/friends/account">
+            <i class="icon ion-spoon"></i>
+          </a>
+          <a class="tab-item" href="#/tab/dash/friends/instagram">
+            <i class="icon ion-social-instagram"></i>
+          </a>
+          <a class="tab-item" href="#/tab/dash/friends/twitter">
+            <i class="icon ion-social-twitter"></i>
+          </a>
+        </div>
+    </div>
+    <ion-content style="padding-top:70px;">
+        <div class="card">
+            <div class="item item-text-wrap">
+                <div class="padding-vertical">
+                    <b>{{business.name}}</b>
+                </div>
+                <div class="padding-vertical">
+                    <div style="display:inline-block; width:49%;">{{business.rating}}/10</div>
+                    <div style="display:inline-block; text-align:right; width:49%;">{{business.categories[0].name}}</div>
+                </div>
+                <div class="padding-vertical">
+                    <div>Price: {{business.price.message}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <div>Today: {{ business.hours.status }}</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <img src="{{business.photos.groups[0].items[3].prefix}}300x500{{business.photos.groups[0].items[3].suffix}}" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <div style="font-weight: bold;">
+                    {{business.location.address}}
+                    <br/>
+                    {{business.location.city}}, {{business.location.state}}  {{business.location.postalCode}}
+                    <br/>
+                    {{business.location.country}}
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <div style="padding-bottom: 15px; border-bottom: 1px solid #DDD;">
+                    <a href="{{ business.menu.mobileUrl }}" style="padding: 0;color:#444;">    
+                        <i class=""></i> 
+                        Menu 
+                    </a>
+                </div>
+                <div style="padding: 15px 0; border-bottom: 1px solid #DDD;">
+                    <i class="ion-android-call"></i> 
+                    {{business.contact.formattedPhone}}
+                </div>
+                <div style="padding: 15px 0; border-bottom: 1px solid #DDD;"> 
+                    <a href="{{ business.url }}" style="padding: 0;color:#444;">
+                        <i class="ion-android-earth"></i>
+                        Website
+                    </a>
+                </div>
+                <div style="padding-top: 15px;">
+                    <a href="{{ business.reservations.url }}" style="padding: 0;color:#444;">
+                        <i class=""></i> 
+                        OpenTable Reservation
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="item item-text-wrap">
+                <h3>
+                    {{business.tips.count}} Tips
+                </h3>
+                <br/>
+                <div ng-repeat="tip in business.tips.groups[0].items">
+                    <div>
+                        <div style="display:inline-block; width: 49%;">
+                            {{ tip.user.firstName }}
+                        </div>
+                        <div style="display:inline-block; width:49%; text-align:right;">
+                            {{ tip.likes.count }} Likes
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        {{ tip.text }}
+                    </div>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+    </ion-content>
 </ion-view>

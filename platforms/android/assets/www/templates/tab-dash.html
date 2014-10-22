@@ -5,9 +5,14 @@
                 <h2>
                     Surprise Me
                 </h2>
-                <button class="button button-block button-energized" ng-click="doSubmit()">
-				  All Cuisines
-				</button>
+                <div style="width: 100%; display: table; table-layout: fixed;">
+                    <button style="display: table-cell; width: 49%; margin-right:1%;" class="button button-block button-energized" ng-click="doSubmit()">
+    				  All Cuisines
+    				</button>
+                    <button style="display: table-cell; width: 49%; margin-left:1%;" class="button button-block button-energized" ng-controller="PopupCtrl" ng-click="showPopup()">
+                      Select Cuisine
+                    </button>
+                </div>
                 <br/>
                 <h4>
                     Location
