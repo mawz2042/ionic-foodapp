@@ -9,6 +9,7 @@ angular.module('starter.controllers', [])
             url: 'https://api.foursquare.com/v2/venues/categories?oauth_token=RGT5ZXHWBGVROTMD1ETZN1GMK0CLTNQEBYMUHEC3OY4XAQDQ&v=20141020'
         }).success(function(data){
             $rootScope.cuisines = data.response.categories[3].categories;
+            // console.log($rootScope.cuisines);
         }).error(function(err) {
             console.log("failed");
         });
@@ -25,7 +26,7 @@ angular.module('starter.controllers', [])
               },
               {
                 text: 'Submit',
-                type: 'button-positive',
+                type: 'button-energized',
                 onTap: function(e) {
                     // Returning a value will cause the promise to resolve with the given value.
                     alert($scope.value.text);
@@ -38,35 +39,9 @@ angular.module('starter.controllers', [])
            alert("you tapped: "+res);
         });
     };
-
-    // A confirm dialog
-    $scope.showConfirm = function() {
-        var confirmPopup = $ionicPopup.confirm({
-            title: 'Consume Ice Cream',
-            template: 'Are you sure you want to eat this ice cream?'
-        });
-        confirmPopup.then(function(res) {
-            if(res) {
-                console.log('You are sure');
-            } else {
-                console.log('You are not sure');
-            }
-        });
-    };
-
-    // An alert dialog
-    $scope.showAlert = function() {
-        var alertPopup = $ionicPopup.alert({
-             title: 'Don\'t eat that!',
-             template: 'It might taste good'
-        });
-        alertPopup.then(function(res) {
-            console.log('Thank you for not eating my delicious ice cream cone');
-        });
-    };
 })
 
-.controller('DashCtrl', function($scope, $http, $rootScope, $state, $ionicLoading, $ionicSwipeCardDelegate) {
+.controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate) {
 	navigator.geolocation.getCurrentPosition(function(position) {
         $scope.position=position;
         $scope.$apply();
@@ -74,17 +49,60 @@ angular.module('starter.controllers', [])
             counter: '',
             name: '',
             id: '',
+            price: '',
+            distance: '',
             latitude: $scope.position.coords.latitude,
             longitude: $scope.position.coords.longitude
         }
     },function(e) { console.log("Error retrieving position " + e.code + " " + e.message) });
+
+    // $ionicPlatform.ready(function() {
+    //     if ( ! $window.localStorage.getItem( 'distance' ) ) {
+    //         $window.localStorage.setItem( 'distance', '500' );
+    //     }
+
+    //     if ( ! $window.localStorage.getItem( 'price' ) ) {
+    //         $window.localStorage.setItem( 'price', '2' );
+    //     }
+    // });
+
+    $scope.distanceList = [
+    { text: "0.5km", value: "500" },
+    { text: "2km", value: "2000" },
+    { text: "10km", value: "10000" },
+    { text: "15km", value: "15000" }
+    ];
+
+    $scope.priceList = [
+    { text: "$", value: "1" },
+    { text: "$$", value: "2" },
+    { text: "$$$", value: "3" },
+    { text: "$$$$", value: "4" }
+    ];
+
+    // Default values
+    $scope.data = {};
+    $scope.data.distance = '500';
+
+    $scope.updateDistance = function(item) {
+        // $window.localStorage.setItem( 'distance', item.value );
+        console.log(item.value);
+        $rootScope.searchCriteria['distance'] = item.value;
+        console.log( 'Distance: ' + $rootScope.searchCriteria['distance'] );
+    }
+
+    $scope.updatePrice = function(item) {
+        // $window.localStorage.setItem( 'price', item.value );
+        console.log(item.value);
+        $rootScope.searchCriteria['price'] = item.value;
+        console.log( 'Price: ' + $rootScope.searchCriteria['price'] );
+    }
 
     $scope.show = function() {
         $ionicLoading.show({
             template: 'Finding the Best Locations'
         });
     };
-
     $scope.hide = function(){
         $ionicLoading.hide();
     };
@@ -115,13 +133,13 @@ angular.module('starter.controllers', [])
         $scope.show();
 		$http({
             method: 'POST',
-            // url: 'http://www.gamehub.ca/foodapp/sample.php',
             url: 'http://www.gamehub.ca/foodapp/foursquare.php',
             data: $rootScope.searchCriteria,
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }).success(function(data){
 	        console.log("success");
             $rootScope.cardTypes = [];
+            console.log(data);
             angular.forEach(data.response.groups[0].items, function(value, key) {
                 $rootScope.cardTypes.push(value.venue);
             });
@@ -136,6 +154,15 @@ angular.module('starter.controllers', [])
 			$state.go('tab.friends', {});
 	    }).error(function(err) {
 	        console.log("failed");
+            $scope.hide();
+            // showAlert
+            var alertPopup = $ionicPopup.alert({
+                title: 'Error',
+                template: err
+            });
+            alertPopup.then(function(res) {
+                console.log(err);
+            });
 	    });
     };
 

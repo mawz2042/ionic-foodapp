@@ -10,32 +10,41 @@
                 </div>
             </div>
           </swipe-card>
-          <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
+          <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)" style="min-height:auto; min-width:300px;">
             <div class="list card">
-                <div class="item item-divider">
+                <div class="item item-divider" style="font-size:20px;">
                     {{demandTitle}}:
                 </div>
 
                 <div class="item item-text-wrap">
                     <div class="padding-vertical">
-                        <div style="display:inline-block; width:49%;vertical-align:top;"><b>{{card.name}}</b></div>
-                        <div style="display:inline-block; text-align:right; width:49%;">{{card.categories[0].name}}</div>
+                        <!--<div style="display:inline-block; text-align:right; width:49%;">{{card.stats.checkinsCount}} Checkins</div>-->
+                        <div style="display:inline-block; width:79%; vertical-align:top;">{{card.name}}</div>
+                        <div style="display:inline-block; text-align:right; width:19%;" ng-if="card.rating != null">{{card.rating}}/10</div>
                     </div>
                     <div class="padding-vertical">
-                        <div style="display:inline-block; width:49%;">{{card.rating}}/10</div>
-                        <div style="display:inline-block; text-align:right; width:49%;">{{card.stats.checkinsCount}} Checkins</div>
+                        <div style="display:inline-block;">{{card.categories[0].name}}</div>
+                        <!--<div style="display:inline-block; text-align:right; width:49%;" ng-if="card.rating != null">{{card.rating}}/10</div>-->
                     </div>
                 </div>
                 
                 <!-- Image Condition -->
-                <div class="item item-image" ng-if="card.photos.count == 0">
-                    <img src="img/img_placeholder.png">
-                </div>
-                <div class="item item-image" ng-if="card.photos.count != 0">
-                    <img src="{{  card.photos.groups[0].items[0].prefix }}300x300{{ card.photos.groups[0].items[0].suffix }}">
+                <div>
+                    <div class="item item-image" ng-if="card.photos.count == 0">
+                        <img src="img/img_placeholder.png">
+                    </div>
+                    <div class="item item-image" ng-if="card.photos.count != 0">
+                        <img src="{{  card.photos.groups[0].items[0].prefix }}500x500{{ card.photos.groups[0].items[0].suffix }}">
+                    </div>
+
+                    <div style="position:absolute;bottom: 0;z-index: 1000;width: 100%;background-color: rgba(0, 0, 0, 0.7); text-align:center; vertical-align:middle;">
+                        <button  class="button button-assertive" ng-click="restaurantSubmit()" style="margin: 5px;">
+                            Take me here!
+                        </button>
+                    </div>
                 </div>
 
-                <div class="item item-text-wrap">
+                <!-- <div class="item item-text-wrap">
                     <div style="float:right;">
                         <button ng-click="restaurantSubmit()" class="button button-icon icon ion-checkmark-round"></button>
                     </div>
@@ -46,15 +55,10 @@
                         <br/>
                         {{card.location.country}}
                     </div>
-                </div>
+                </div> -->
             </div>
           </swipe-card>
 
         </swipe-cards>
-
-    <!-- <div class="bar bar-footer bar-energized">
-        <button ng-click="goAway()" class="button button-icon icon ion-checkmark-round"></button>
-        <button ng-click="goAway()" class="button button-icon icon ion-close-round"></button>
-    </div> -->
     <ion-content>
 </ion-view> 

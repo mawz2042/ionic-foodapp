@@ -1,26 +1,60 @@
 <ion-view>
   	<ion-content class="padding">
-	    <div>
-		    <div style="text-align:center;">   
-                <h2>
-                    Surprise Me
-                </h2>
-                <div style="width: 100%; display: table; table-layout: fixed;">
-                    <button style="display: table-cell; width: 49%; margin-right:1%;" class="button button-block button-energized" ng-click="doSubmit()">
-    				  All Cuisines
-    				</button>
-                    <button style="display: table-cell; width: 49%; margin-left:1%;" class="button button-block button-energized" ng-controller="PopupCtrl" ng-click="showPopup()">
-                      Select Cuisine
-                    </button>
-                </div>
-                <br/>
-                <h4>
+        <br/>
+	    <div>   
+            <h2>
+                Surprise Me
+            </h2>
+            <div style="width: 100%; display: table; table-layout: fixed;">
+                <button style="display: table-cell; width: 49%; margin-right:1%;" class="button button-block button-energized" ng-click="doSubmit()">
+				  All Cuisines
+				</button>
+                <button style="display: table-cell; width: 49%; margin-left:1%;" class="button button-block button-energized" ng-controller="PopupCtrl" ng-click="showPopup()">
+                  Select Cuisine
+                </button>
+            </div>
+            <br/>
+
+            <div class="list list-inset">
+                <div class="item item-divider">
                     Location
-                </h4>
-                <div>
+                </div>
+                <div class="item item-text-wrap">
                     <input type="text" name="location" placeholder="Current Location"> 
                 </div>
-		    </div>
-		</div>
+            </div>
+            <div class="list list-inset">
+                <div class="item item-divider">
+                    Distance (km)
+                </div>
+                <div class="button-bar">    
+                    <ion-radio ng-repeat="item in distanceList"
+                               ng-value="item.value"
+                               ng-model="data.distance"
+                               ng-change="updateDistance(item)"
+                               class="button button-energized button-outline"
+                               name="radio1">
+                      {{ item.text }}
+                    </ion-radio>
+                </div>
+            </div>
+
+            <div class="list list-inset">
+                <div class="item item-divider">
+                    Price
+                </div>
+                <div class="button-bar">    
+                    <ion-radio ng-repeat="item in priceList"
+                               ng-value="item.value"
+                               ng-model="data.price"
+                               ng-change="updatePrice(item)"
+                               class="button button-energized button-outline"
+                               name="radio2">
+                      {{ item.text }}
+                    </ion-radio>
+                </div>
+            </div>
+
+        </div>
   	</ion-content>
 </ion-view>

@@ -6,10 +6,10 @@
   xmlns:cdv="http://cordova.apache.org/ns/1.0"
   >
 
-  <name>Food App</name>
+  <name>Eat</name>
   
   <description>
-    Personal assistant food application.
+    Eat - Personal assistant food application.
   </description>
   
   <author email="alex44nguyen@gmail.com" href="http://alexandernguyen.gamehub.ca/">

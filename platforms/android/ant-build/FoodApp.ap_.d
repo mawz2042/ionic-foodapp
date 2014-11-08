@@ -41,6 +41,7 @@ C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\plugins \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\templates \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\css\style.css \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\css\tabSlideBox.css \
+C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\img_placeholder.png \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\ionic.png \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\pic.png \
 C:\xampp\htdocs\ionic-foodapp\platforms\android\assets\www\img\pic2.png \

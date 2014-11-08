@@ -5,6 +5,7 @@
 	$postdata = file_get_contents("php://input");
 	$request = json_decode($postdata);
 	$name = $request->name;
+	$twitterHandler = $request->twitter;
 
 	$twitteruser = "Al3x_Tran"; //user name you want to reference  
 	$notweets = 20; //how many tweets you want to retrieve  
@@ -20,7 +21,7 @@
 	  
 	$connection = getToken($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);  
 	  
-	$tweets = $connection->get("https://api.twitter.com/1.1/search/tweets.json?q=" . $name);  
+	$tweets = $connection->get("https://api.twitter.com/1.1/search/tweets.json?q=" . $twitterHandler);  
 	  
 	echo json_encode($tweets);  
 	//echo $tweets; //testing remove for production     

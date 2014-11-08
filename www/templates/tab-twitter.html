@@ -1,22 +1,45 @@
 <ion-view>
-	<div class="tabs-striped tabs-top tabs-background-energized tabs-light">
-	    <div class="tabs">
+	<div class="tabs tabs-icon-top">
 	      <a class="tab-item" href="#/tab/dash/friends/account">
 	      	<i class="icon ion-spoon"></i>
+			  Info
 	      </a>
 	      <a class="tab-item" href="#/tab/dash/friends/instagram">
 	        <i class="icon ion-social-instagram"></i>
+			  Instagram
 	      </a>
-	      <a class="tab-item active" href="#/tab/dash/friends/twitter">
+	      <a class="tab-item active" href="#/tab/dash/friends/twitter" style="color: rgb(204, 35, 17)">
 	        <i class="icon ion-social-twitter"></i>
+			  Twitter
 	      </a>
-	    </div>
   	</div>
-	<ion-content class="padding" style="padding-top:70px">
-		<div class="card">
+	<ion-content class="padding">
+		<div class="list card">
 		    <div class="item item-text-wrap" ng-repeat="status in twitter.statuses">
 		        <div>
 		            {{status.text}}
+		        </div>
+		    </div>
+		    <div class="item item-body">
+		        <h3>
+		            {{business.tips.count}} Tips &amp; Reviews
+		        </h3>
+		        <br/>
+		        <div ng-repeat="tip in business.tips.groups[0].items">
+		            <div>
+		                <div style="display:inline-block; width: 49%;">
+		                    {{ tip.user.firstName }}
+		                </div>
+		                <div style="display:inline-block; width:49%; text-align:right;">
+		                    {{ tip.likes.count }} Likes
+		                </div>
+		            </div>
+		            <br/>
+		            <div>
+		                {{ tip.text }}
+		            </div>
+		            <br/>
+		            <br/>
 		        </div>
 		    </div>
 		</div>
