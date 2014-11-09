@@ -1,12 +1,14 @@
 angular.module('starter.controllers', [])
 
-    .controller('HomeCtrl', function($scope, $state) {
-        $scope.login = function() {
-            $state.go('tab.dash', {});
-        };
+    .controller('HomeCtrl', function($scope, $state, $rootScope) {  
     })
 
     .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate) {
+        // Home login - should move to homectrl
+        $scope.login = function() {        
+            $state.go('tab.dash', {});
+        };
+
         // Show and Hide Loading Overlay
         $scope.show = function() {
             $ionicLoading.show({
@@ -49,7 +51,7 @@ angular.module('starter.controllers', [])
                 twitter: '',
                 price: '',
                 distance: '',
-                cuisine: '',
+                cuisineId: '',
                 latitude: $scope.position.coords.latitude,
                 longitude: $scope.position.coords.longitude
             }
@@ -108,7 +110,7 @@ angular.module('starter.controllers', [])
                 console.log("failed");
             });
 
-            $scope.cuisineType = {
+            $scope.cuisineId = {
                 type: ''
             };
 
@@ -124,11 +126,11 @@ angular.module('starter.controllers', [])
                   },
                   {
                     text: 'Submit',
-                    type: 'button-positive',
+                    type: 'button-assertive',
                     onTap: function(e) {
                         // Returning a value will cause the promise to resolve with the given value.
-                        $rootScope.searchCriteria['cuisine'] =  $scope.cuisineType.type;;
-                        console.log($rootScope.searchCriteria['cuisine']);
+                        $rootScope.searchCriteria['cuisineId'] =  $scope.cuisineId.type;;
+                        console.log($rootScope.searchCriteria['cuisineId']);
                         $scope.doSubmit();
                     }
                   },
@@ -164,33 +166,29 @@ angular.module('starter.controllers', [])
                     $state.go('tab.friends', {});
                 } else {
                     $scope.hide();
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Error',
+                    var errorPopup = $ionicPopup.alert({
+                        title: 'Sorry!',
                         template: "No results could be found",
                         buttons: [
                             {
                                 text: 'Close',
-                                type: 'button-positive'
+                                type: 'button-assertive'
                             }
                         ]
                     });
                 }
             }).error(function(err) {
-                console.log("failed");
                 $scope.hide();
-                // showAlert
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Error',
-                    template: "No results could be found",
+                // show error
+                var errorPopup = $ionicPopup.alert({
+                    title: 'Sorry!',
+                    template: "Something has gone wrong! <br/> Could not establish connection",
                     buttons: [
                       {
                         text: 'Close',
-                        type: 'button-positive'
+                        type: 'button-assertive'
                       }
                     ]
-                });
-                alertPopup.then(function(res) {
-                    console.log(err);
                 });
             });
         };

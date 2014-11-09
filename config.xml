@@ -26,13 +26,4 @@
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="BackupWebStorage" value="none"/>
 
-  <!-- iOS Plugins -->
-  <feature name="StatusBar">
-    <param name="ios-package" value="CDVStatusBar" onload="true"/>
-  </feature>
-
-  <!-- Android Plugins -->
-  <feature name="Geolocation">
-    <param name="android-package" value="org.apache.cordova.GeoBroker" />
-  </feature>
 </widget>

@@ -55,7 +55,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       views: {
         'tab-home': {
           templateUrl: 'templates/tab-home.html',
-          controller: 'HomeCtrl'
+          controller: 'DashCtrl'
         }
       }
     })

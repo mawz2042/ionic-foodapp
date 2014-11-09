@@ -15,7 +15,7 @@ $DEFAULT_RADIUS = "500"; // in m
 $SEARCH_LIMIT = "50";
 $DEFAULT_PRICE = "1,2,3,4";
 
-function explore($term, $cuisine, $lat, $long, $radius, $price) {    
+function explore($term, $cuisineId, $lat, $long, $radius, $price) {    
     $newTerm = $term ?: $GLOBALS['DEFAULT_TERM'];
     $newLat = $lat ?: $GLOBALS['DEFAULT_LAT'];
     $newLong = $long ?: $GLOBALS['DEFAULT_LONG'];
@@ -23,9 +23,11 @@ function explore($term, $cuisine, $lat, $long, $radius, $price) {
     $newLimit = $GLOBALS['SEARCH_LIMIT'];
     $newPrice = $price ?: $GLOBALS['DEFAULT_PRICE'];
 
-    if ($cusine != null) {
-        $foursquare_url = "https://api.foursquare.com/v2/venues/explore?ll=".$newLat.",".$newLong."&openNow=1&query=".$cuisine."&radius=".$newRadius."&price=".$newPrice."&limit=".$newLimit."&venuePhotos=1&oauth_token=".$GLOBALS['OAUTH_TOKEN']."&v=".$GLOBALS['V_TOKEN'];
+    if ($cuisineId != null) {
+        // Search a specific cuisine
+        $foursquare_url = "https://api.foursquare.com/v2/venues/explore?ll=".$newLat.",".$newLong."&openNow=1&categoryId=".$cuisineId."&radius=".$newRadius."&price=".$newPrice."&limit=".$newLimit."&venuePhotos=1&oauth_token=".$GLOBALS['OAUTH_TOKEN']."&v=".$GLOBALS['V_TOKEN'];
     } else {
+        // Search all cuisines
         $foursquare_url = "https://api.foursquare.com/v2/venues/explore?ll=".$newLat.",".$newLong."&openNow=1&section=".$newTerm."&radius=".$newRadius."&price=".$newPrice."&limit=".$newLimit."&venuePhotos=1&oauth_token=".$GLOBALS['OAUTH_TOKEN']."&v=".$GLOBALS['V_TOKEN'];
     }
 
@@ -34,11 +36,11 @@ function explore($term, $cuisine, $lat, $long, $radius, $price) {
     print $foursquare_call;
 }
  
-$cuisine = $request->cuisine;    
+$cuisineId = $request->cuisineId;    
 $lat = $request->latitude;
 $long = $request->longitude;
 $radius = $request->distance;
 $price = $request->price;
 
-return explore($term, $cuisine, $lat, $long, $radius, $price);
+return explore($term, $cuisineId, $lat, $long, $radius, $price);
 ?>

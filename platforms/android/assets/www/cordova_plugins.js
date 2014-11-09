@@ -13,6 +13,13 @@ module.exports = [
         "clobbers": [
             "device"
         ]
+    },
+    {
+        "file": "plugins/plugin.http.request/www/http-request.js",
+        "id": "plugin.http.request.phonegap-http-requst",
+        "clobbers": [
+            "cordova.plugins.http-request"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -21,7 +28,8 @@ module.exports.metadata =
     "com.ionic.keyboard": "1.0.3",
     "org.apache.cordova.console": "0.2.11",
     "org.apache.cordova.device": "0.2.12",
-    "org.apache.cordova.geolocation": "0.3.10"
+    "org.apache.cordova.geolocation": "0.3.10",
+    "plugin.http.request": "1.0.0"
 }
 // BOTTOM OF METADATA
 });
