@@ -1,7 +1,7 @@
 {
   "name": "Eat",
-  "version": "0.0.`",
-  "description": "Eat: Personal intellegence app for food",
+  "version": "0.0.1",
+  "description": "Eat: Personal intellegence and decision making app for food",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^0.7.1",

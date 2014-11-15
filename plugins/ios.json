@@ -9,7 +9,7 @@
                 "parents": {
                     "/*": [
                         {
-                            "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
+                            "xml": "<feature name=\"Geolocation\"><param name=\"ios-package\" value=\"CDVLocation\" /></feature>",
                             "count": 1
                         },
                         {
@@ -21,11 +21,19 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Geolocation\"><param name=\"ios-package\" value=\"CDVLocation\" /></feature>",
+                            "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"HttpRequest\"><param name=\"ios-package\" value=\"HttpRequest\" /></feature>",
+                            "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" onload=\"true\" value=\"CDVStatusBar\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
                             "count": 1
                         }
                     ]
@@ -54,20 +62,20 @@
         }
     },
     "installed_plugins": {
-        "com.ionic.keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.myapp624833"
+        "org.apache.cordova.geolocation": {
+            "PACKAGE_NAME": "com.ionicframework.Eat"
         },
         "org.apache.cordova.console": {
-            "PACKAGE_NAME": "com.ionicframework.myapp624833"
+            "PACKAGE_NAME": "com.ionicframework.Eat"
         },
         "org.apache.cordova.device": {
-            "PACKAGE_NAME": "com.ionicframework.myapp624833"
+            "PACKAGE_NAME": "com.ionicframework.Eat"
         },
-        "org.apache.cordova.geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.myapp624833"
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.Eat"
         },
-        "plugin.http.request": {
-            "PACKAGE_NAME": "com.ionicframework.myapp624833"
+        "org.apache.cordova.statusbar": {
+            "PACKAGE_NAME": "com.ionicframework.Eat"
         }
     },
     "dependent_plugins": {}

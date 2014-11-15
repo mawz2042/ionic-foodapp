@@ -41,21 +41,21 @@ angular.module('starter.controllers', [])
         };
 
         // Geolocation to get location position
-        navigator.geolocation.getCurrentPosition(function(position) {
-            $scope.position=position;
-            $scope.$apply();
-            $rootScope.searchCriteria = {
-                counter: '',
-                name: '',
-                id: '',
-                twitter: '',
-                price: '',
-                distance: '',
-                cuisineId: '',
-                latitude: $scope.position.coords.latitude,
-                longitude: $scope.position.coords.longitude
-            }
-        },function(e) { console.log("Error retrieving position " + e.code + " " + e.message) });
+            navigator.geolocation.getCurrentPosition(function(position) {
+                $scope.position=position;
+                $scope.$apply();
+                $rootScope.searchCriteria = {
+                    counter: '',
+                    name: '',
+                    id: '',
+                    twitter: '',
+                    price: '',
+                    distance: '',
+                    cuisineId: '',
+                    latitude: $scope.position.coords.latitude,
+                    longitude: $scope.position.coords.longitude
+                }
+            },function(e) { console.log("Error retrieving position " + e.code + " " + e.message) });
 
         // $ionicPlatform.ready(function() {
         //     if ( ! $window.localStorage.getItem( 'distance' ) ) {
