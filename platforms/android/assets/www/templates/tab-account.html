@@ -25,8 +25,12 @@
 
             <div class="item item-text-wrap">
                 <div class="padding-vertical">
-                    <div style="display:inline-block; width:49%; vertical-align: top;">{{business.rating}}/10</div>
-                    <div style="display:inline-block; text-align:right; width:49%; vertical-align: top;">{{business.price.message}}</div>
+                    <div ng-if="business.price.message != null">
+                        Price: {{business.price.message}}
+                    </div>
+                    <div ng-if="business.rating != null">
+                        Rating: {{business.rating}}/10
+                    </div>
                 </div>
                 <div class="padding-vertical">Today: {{ business.hours.status }}</div>
             </div>
@@ -35,7 +39,7 @@
                 <img src="img/img_placeholder.png">
             </div>
             <div class="item item-image" ng-if="business.photos.count != 0">
-                <img src="{{business.photos.groups[0].items[3].prefix}}500x500{{business.photos.groups[0].items[3].suffix}}">
+                <img src="{{business.photos.groups[0].items[0].prefix}}500x500{{business.photos.groups[0].items[0].suffix}}">
             </div>
 
             <div class="item item-divider">
@@ -50,6 +54,14 @@
                 <br/>
             </div>
 
+             <div class="item item-text-wrap" style="display: table; width: 100%;">
+                <div style="font-weight:bold;">Hours</div>
+                <div ng-repeat="hours in business.hours.timeframes">
+                    <div style="display: table-cell; min-width: 100px;">{{ hours.days }}</div> 
+                    <div style="display: table-cell;">{{ hours.open[0].renderedTime }}</div>
+                </div>
+            </div>
+
             <div>
                 <a href="{{ business.menu.mobileUrl }}" class="item item-icon-left">
                     <i class="icon ion-ios7-paper"></i>
@@ -61,7 +73,7 @@
                     {{business.contact.formattedPhone}}
                 </a>
 
-                <a href="{{ business.url }}" class="item item-icon-left">
+                <a ng-click="openWebsite()" class="item item-icon-left">
                     <i class="icon ion-earth"></i>
                     Website
                 </a>

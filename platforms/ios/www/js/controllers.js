@@ -21,22 +21,16 @@ angular.module('starter.controllers', [])
         // List of demand headings
         $rootScope.demandTitles = [
             "Go To",
-            "Get Fat At",
             "Indulge At",
-            "Calorie Binge At",
-            "Get Your Butt To",
-            "Pig Out",
             "Try",
-            "Gorge At",
-            "Stuff Your Face At",
-            "It's Decided You're Going",
+            "You're Going To",
             "Your Stomach Is Calling",
             "It's Time 2 Go To"
         ];
         // Randomize the list of demands
         $rootScope.ranDemandTitle = function() {
             // Choose Random Demand Title
-            $scope.randomNum = Math.floor((Math.random() * 11));
+            $scope.randomNum = Math.floor((Math.random() * $rootScope.demandTitles.length));
             $rootScope.demandTitle = $rootScope.demandTitles[$scope.randomNum];
         };
 
@@ -163,6 +157,8 @@ angular.module('starter.controllers', [])
 
                     $rootScope.ranDemandTitle();
                     $scope.hide();
+                    // Reset the saved index for new search
+                    $rootScope.lastSavedIndex = null;
                     $state.go('tab.friends', {});
                 } else {
                     $scope.hide();
@@ -209,13 +205,22 @@ angular.module('starter.controllers', [])
             $ionicLoading.hide();
         };
 
+        // Initilization counter
         $scope.counter = 0;
         $scope.cardSwiped = function(index) {
+            // Assign saved index to counter if there exists one
+            if ($rootScope.lastSavedIndex != null) {
+                $scope.counter = $rootScope.lastSavedIndex;
+            }
+
+            // Check if counter/array index has reached the end
             if($scope.counter == $rootScope.cardTypes.length) {
                 $scope.counter = 0;
             } else {
                 $scope.counter = $scope.counter + 1;
             }
+
+            // Generate go to title
             $rootScope.ranDemandTitle();
 
             var newCard = $rootScope.cardTypes[$scope.counter];
@@ -223,11 +228,15 @@ angular.module('starter.controllers', [])
                 $rootScope.cards.push(newCard);
                 console.log(newCard);
 
+                // Assign id to search query
                 $rootScope.searchCriteria['id'] = newCard.id;
                 console.log($rootScope.searchCriteria['id']);
             }
+            // save the index for reentry
+            $rootScope.lastSavedIndex = $scope.counter;
         };
 
+        // Removes an entry from cards array
         $scope.cardDestroyed = function(index) {
             $rootScope.cards.splice(index, 1);
         };
@@ -244,15 +253,15 @@ angular.module('starter.controllers', [])
                 $rootScope.business = data.response.venue;
                 console.log($rootScope.business);
 
-                // Foursquare Photos
+                // All Photos
                 $http({
                     method: 'POST',
                     url: 'http://www.gamehub.ca/foodapp/foursquarePhotoDetails.php',
                     data: $rootScope.searchCriteria,
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                 }).success(function(data){
-                    $rootScope.instagram = data;
-                    console.log($rootScope.instagram);
+                    $rootScope.photos = data;
+                    console.log($rootScope.photos);
                 }).error(function(data){
                     console.log("there is an error");
                 });
@@ -279,7 +288,11 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('AccountCtrl', function($scope) {
+    .controller('AccountCtrl', function($scope, $rootScope) {
+        $scope.openWebsite = function(link) {
+            console.log(link);
+            window.open(link, '_blank', 'location=yes');
+        }
     })
 
     .controller('TwitterCtrl', function($scope) {

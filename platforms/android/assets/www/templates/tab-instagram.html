@@ -14,10 +14,20 @@
 	      </a>
   	</div>
 	<ion-content class="padding">
-	    <div class="item item-image" ng-repeat="image in instagram.response.photos.items" style="width:50%; height:auto; display:inline-block;">
+	    <!-- <div class="item item-image" ng-repeat="image in instagram.response.photos.items" style="width:50%; height:auto; display:inline-block;"> -->
+	    <div class="list card" ng-repeat="image in instagram.response.photos.items">
+			<div class="item item-image">
+				<img src="{{image.prefix}}500x500{{image.suffix}}"/>
+			</div>
+			<a class="item item-icon-left" href="#">
+				<i class="icon ion-spoon"></i>
+				1234 likes
+			</a>
+		</div>
+		<!-- div class="item item-image" ng-repeat="image in instagram.response.photos.items">
 	        <div style="text-align:center;">
 	            <img src="{{image.prefix}}500x500{{image.suffix}}"/>
 	        </div>
-	    </div>
+	    </div> -->
 	</ion-content>
 </ion-view>

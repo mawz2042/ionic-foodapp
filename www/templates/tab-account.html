@@ -25,8 +25,12 @@
 
             <div class="item item-text-wrap">
                 <div class="padding-vertical">
-                    <div style="display:inline-block; width:49%; vertical-align: top;">Price: {{business.price.message}}</div>
-                    <div style="display:inline-block; text-align:right; width:49%; vertical-align: top;" ng-if="card.rating != null">{{business.rating}}/10</div>
+                    <div ng-if="business.price.message != null">
+                        Price: {{business.price.message}}
+                    </div>
+                    <div ng-if="business.rating != null">
+                        Rating: {{business.rating}}/10
+                    </div>
                 </div>
                 <div class="padding-vertical">Today: {{ business.hours.status }}</div>
             </div>
@@ -50,23 +54,31 @@
                 <br/>
             </div>
 
+             <div class="item item-text-wrap" style="display: table; width: 100%;">
+                <div style="font-weight:bold;">Hours</div>
+                <div ng-repeat="hours in business.hours.timeframes">
+                    <div style="display: table-cell; min-width: 120px;">{{ hours.days }}</div> 
+                    <div style="display: table-cell;">{{ hours.open[0].renderedTime }}</div>
+                </div>
+            </div>
+
             <div>
-                <a href="{{ business.menu.mobileUrl }}" class="item item-icon-left">
+                <a ng-if="business.menu.mobileUrl != null" ng-click="openWebsite(business.menu.mobileUrl)" class="item item-icon-left">
                     <i class="icon ion-ios7-paper"></i>
                     Menu
                 </a>
 
-                <a href="#" class="item item-icon-left">
+                <a ng-if="business.contact.formattedPhone != null" class="item item-icon-left">
                     <i class="icon ion-ios7-telephone"></i>
                     {{business.contact.formattedPhone}}
                 </a>
 
-                <a href="{{ business.url }}" class="item item-icon-left">
+                <a ng-if="business.url != null" ng-click="openWebsite(business.url)" class="item item-icon-left">
                     <i class="icon ion-earth"></i>
                     Website
                 </a>
 
-                <a href="{{ business.reservations.url }}" class="item item-icon-left">
+                <a ng-if="business.reservations.url != null" ng-click="openWebsite(business.reservations.url)" class="item item-icon-left">
                     <i class="icon ion-ios7-navigate"></i>
                     OpenTable Reservation
                 </a>

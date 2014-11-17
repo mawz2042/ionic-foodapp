@@ -16,7 +16,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
     if(window.StatusBar) {
       // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+      StatusBar.overlaysWebView(true);
+      StatusBar.styleLightContent();
+      // StatusBar.styleDefault();
     }
   });
 })
@@ -55,7 +57,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       views: {
         'tab-home': {
           templateUrl: 'templates/tab-home.html',
-          controller: 'HomeCtrl'
+          controller: 'DashCtrl'
         }
       }
     })
