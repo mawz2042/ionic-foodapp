@@ -1,6 +1,20 @@
 angular.module('starter.controllers', [])
 
-    .controller('HomeCtrl', function($scope, $state, $rootScope) {  
+    .controller('NavCtrl', function($scope, $rootScope, $state, $ionicViewService) {
+        // Nav back fix
+        $scope.goBack = function() {
+            var stateId = $rootScope.$viewHistory.currentView.stateId;
+            // If view is in card list then remove history and set back to dash view
+            if (stateId == "tab.friends") {
+                // assign it as the current view (as far as history is concerned)
+                $ionicViewService.setNavViews("008"); 
+                $state.go('tab.dash', {});
+            }
+            // If view is in any of the tabbed pages, set back to card lsit
+            if ((stateId == "tab.account") || (stateId == "tab.instagram") || (stateId == "tab.twitter")) {
+                $state.go('tab.friends', {});
+            }
+        };
     })
 
     .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate) {

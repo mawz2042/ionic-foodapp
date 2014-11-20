@@ -57,28 +57,28 @@
              <div class="item item-text-wrap" style="display: table; width: 100%;">
                 <div style="font-weight:bold;">Hours</div>
                 <div ng-repeat="hours in business.hours.timeframes">
-                    <div style="display: table-cell; min-width: 100px;">{{ hours.days }}</div> 
+                    <div style="display: table-cell; min-width: 120px;">{{ hours.days }}</div> 
                     <div style="display: table-cell;">{{ hours.open[0].renderedTime }}</div>
                 </div>
             </div>
 
             <div>
-                <a href="{{ business.menu.mobileUrl }}" class="item item-icon-left">
+                <a ng-if="business.menu.mobileUrl != null" ng-click="openWebsite(business.menu.mobileUrl)" class="item item-icon-left">
                     <i class="icon ion-ios7-paper"></i>
                     Menu
                 </a>
 
-                <a href="#" class="item item-icon-left">
+                <a ng-if="business.contact.formattedPhone != null" class="item item-icon-left">
                     <i class="icon ion-ios7-telephone"></i>
                     {{business.contact.formattedPhone}}
                 </a>
 
-                <a ng-click="openWebsite()" class="item item-icon-left">
+                <a ng-if="business.url != null" ng-click="openWebsite(business.url)" class="item item-icon-left">
                     <i class="icon ion-earth"></i>
                     Website
                 </a>
 
-                <a href="{{ business.reservations.url }}" class="item item-icon-left">
+                <a ng-if="business.reservations.url != null" ng-click="openWebsite(business.reservations.url)" class="item item-icon-left">
                     <i class="icon ion-ios7-navigate"></i>
                     OpenTable Reservation
                 </a>

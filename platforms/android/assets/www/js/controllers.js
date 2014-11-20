@@ -1,6 +1,20 @@
 angular.module('starter.controllers', [])
 
-    .controller('HomeCtrl', function($scope, $state, $rootScope) {  
+    .controller('NavCtrl', function($scope, $rootScope, $state, $ionicViewService) {
+        // Nav back fix
+        $scope.goBack = function() {
+            var stateId = $rootScope.$viewHistory.currentView.stateId;
+            // If view is in card list then remove history and set back to dash view
+            if (stateId == "tab.friends") {
+                // assign it as the current view (as far as history is concerned)
+                $ionicViewService.setNavViews("008"); 
+                $state.go('tab.dash', {});
+            }
+            // If view is in any of the tabbed pages, set back to card lsit
+            if ((stateId == "tab.account") || (stateId == "tab.instagram") || (stateId == "tab.twitter")) {
+                $state.go('tab.friends', {});
+            }
+        };
     })
 
     .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate) {
@@ -157,6 +171,8 @@ angular.module('starter.controllers', [])
 
                     $rootScope.ranDemandTitle();
                     $scope.hide();
+                    // Reset the saved index for new search
+                    $rootScope.lastSavedIndex = null;
                     $state.go('tab.friends', {});
                 } else {
                     $scope.hide();
@@ -203,13 +219,22 @@ angular.module('starter.controllers', [])
             $ionicLoading.hide();
         };
 
+        // Initilization counter
         $scope.counter = 0;
         $scope.cardSwiped = function(index) {
+            // Assign saved index to counter if there exists one
+            if ($rootScope.lastSavedIndex != null) {
+                $scope.counter = $rootScope.lastSavedIndex;
+            }
+
+            // Check if counter/array index has reached the end
             if($scope.counter == $rootScope.cardTypes.length) {
                 $scope.counter = 0;
             } else {
                 $scope.counter = $scope.counter + 1;
             }
+
+            // Generate go to title
             $rootScope.ranDemandTitle();
 
             var newCard = $rootScope.cardTypes[$scope.counter];
@@ -217,11 +242,15 @@ angular.module('starter.controllers', [])
                 $rootScope.cards.push(newCard);
                 console.log(newCard);
 
+                // Assign id to search query
                 $rootScope.searchCriteria['id'] = newCard.id;
                 console.log($rootScope.searchCriteria['id']);
             }
+            // save the index for reentry
+            $rootScope.lastSavedIndex = $scope.counter;
         };
 
+        // Removes an entry from cards array
         $scope.cardDestroyed = function(index) {
             $rootScope.cards.splice(index, 1);
         };
@@ -238,15 +267,15 @@ angular.module('starter.controllers', [])
                 $rootScope.business = data.response.venue;
                 console.log($rootScope.business);
 
-                // Foursquare Photos
+                // All Photos
                 $http({
                     method: 'POST',
                     url: 'http://www.gamehub.ca/foodapp/foursquarePhotoDetails.php',
                     data: $rootScope.searchCriteria,
                     headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
                 }).success(function(data){
-                    $rootScope.instagram = data;
-                    console.log($rootScope.instagram);
+                    $rootScope.photos = data;
+                    console.log($rootScope.photos);
                 }).error(function(data){
                     console.log("there is an error");
                 });
@@ -274,9 +303,9 @@ angular.module('starter.controllers', [])
     })
 
     .controller('AccountCtrl', function($scope, $rootScope) {
-        $scope.openWebsite = function() {
-            console.log($rootScope.business.url);
-            window.open($rootScope.business.url, '_blank', 'location=yes');
+        $scope.openWebsite = function(link) {
+            console.log(link);
+            window.open(link, '_blank', 'location=yes');
         }
     })
 
