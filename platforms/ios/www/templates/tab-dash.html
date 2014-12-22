@@ -1,0 +1,54 @@
+<ion-view>
+  	<ion-content scroll="false">
+	    <div>
+            <div style="background-image: url(img/blur_img.jpg); background-repeat: no-repeat; height: 50vh;">
+                <div style="position:absolute; top: 39vh; width: 100%; display: table; table-layout: fixed;">
+                    <button style="display: table-cell; width: 44%; margin:0 3% 0 3%;" class="button button-block button-assertive" ng-click="doSubmit()">
+                        All Cuisines
+                    </button>
+                    <button style="display: table-cell; width: 44%; margin:0 3% 0 3%;" class="button button-block button-assertive" ng-click="showPopup()">
+                        Select Cuisine
+                    </button>
+                    <!--<div class="list list-inset">-->
+                        <!--<label class="item item-input">-->
+                            <!--<i class="icon ion-search placeholder-icon"></i>-->
+                            <!--<input type="text" placeholder="Current Location">-->
+                        <!--</label>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="list list-inset">
+              <p>Distance: {{distanceList.value}} km</p>
+              <div class="range range-assertive">
+                <input type="range" min="{{distanceList.min}}" max="{{distanceList.max}}" value="{{distanceList.value}}" step="0.5" ng-model="distanceList.value" ng-change="updateDistance(distanceList.value)">
+              </div>
+                <!-- <p>Distance (km)</p>
+                <div class="button-bar">
+                    <ion-radio ng-repeat="item in distanceList"
+                               ng-value="item.value"
+                               ng-model="data.distance"
+                               ng-change="updateDistance(item)"
+                               class="button button-assertive button-outline"
+                               name="radio1">
+                      {{ item.text }}
+                    </ion-radio>
+                </div> -->
+            </div>
+
+            <div class="list list-inset">
+                <p>Price</p>
+                <div class="button-bar">
+                    <ion-radio ng-repeat="item in priceList"
+                               ng-value="item.value"
+                               ng-model="data.price"
+                               ng-change="updatePrice(item)"
+                               class="button button-assertive button-outline"
+                               name="radio2">
+                      {{ item.text }}
+                    </ion-radio>
+                </div>
+            </div>
+
+        </div>
+  	</ion-content>
+</ion-view>

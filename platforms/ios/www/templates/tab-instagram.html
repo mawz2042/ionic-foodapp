@@ -1,0 +1,41 @@
+<ion-view>
+	<div class="tabs tabs-icon-top">
+	      <a class="tab-item" href="#/tab/dash/friends/account">
+	        <i class="icon ion-spoon"></i>
+			  Info
+	      </a>
+	      <a class="tab-item active" href="#/tab/dash/friends/instagram" style="color: rgb(204, 35, 17)">
+	        <i class="icon ion-social-instagram"></i>
+			  Instagram
+	      </a>
+	      <a class="tab-item" href="#/tab/dash/friends/twitter">
+	        <i class="icon ion-social-twitter"></i>
+			  Twitter
+	      </a>
+  	</div>
+	<ion-content class="padding">
+	    <!-- <div class="item item-image" ng-repeat="image in instagram.response.photos.items" style="width:50%; height:auto; display:inline-block;"> -->
+	    <div class="list card" ng-repeat="photo in photos">
+			<div class="item item-image">
+				<img src="{{ photo.image }}"/>
+			</div>
+			<div ng-if="photo.caption != null" class="item item-body">
+				{{ photo.caption }}
+			</div>
+			<div class="item tabs tabs-secondary tabs-icon-left">
+			    <a class="tab-item" style="text-align:left; padding-left: 16px;">
+			      	<i class="icon ion-spoon"></i>
+			      	{{ photo.likes }}
+			    </a>
+			    <a class="tab-item" style="text-align:right; padding-right: 16px;">
+			      	{{ photo.source }}
+			    </a>
+			</div>
+		</div>
+		<!-- div class="item item-image" ng-repeat="image in instagram.response.photos.items">
+	        <div style="text-align:center;">
+	            <img src="{{image.prefix}}500x500{{image.suffix}}"/>
+	        </div>
+	    </div> -->
+	</ion-content>
+</ion-view>
