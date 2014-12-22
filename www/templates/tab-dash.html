@@ -18,7 +18,11 @@
                 </div>
             </div>
             <div class="list list-inset">
-                <p>Distance (km)</p>
+              <p>Distance: {{distanceList.value}} km</p>
+              <div class="range range-assertive">
+                <input type="range" min="{{distanceList.min}}" max="{{distanceList.max}}" value="{{distanceList.value}}" step="0.5" ng-model="distanceList.value" ng-change="updateDistance(distanceList.value)">
+              </div>
+                <!-- <p>Distance (km)</p>
                 <div class="button-bar">
                     <ion-radio ng-repeat="item in distanceList"
                                ng-value="item.value"
@@ -28,7 +32,7 @@
                                name="radio1">
                       {{ item.text }}
                     </ion-radio>
-                </div>
+                </div> -->
             </div>
 
             <div class="list list-inset">

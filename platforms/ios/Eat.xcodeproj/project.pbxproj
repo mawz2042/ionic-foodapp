@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -525,6 +524,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -549,7 +549,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Eat;
-				PROVISIONING_PROFILE = "9a87b5ca-ddaa-4997-8c79-5770c99c1af3";
+				PROVISIONING_PROFILE = "9093cc6e-2460-47e1-bd2b-2c30b46eb5aa";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -562,6 +562,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Eat/Eat-Prefix.pch";
@@ -584,7 +585,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Eat;
-				PROVISIONING_PROFILE = "4f5f7f2f-0d00-4bb4-9a38-f8c977911e07";
+				PROVISIONING_PROFILE = "5bb5ad7e-6101-41f2-b177-d178bbc8ad96";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

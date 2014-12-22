@@ -68,7 +68,7 @@
                     Menu
                 </a>
 
-                <a ng-if="business.contact.formattedPhone != null" class="item item-icon-left">
+                <a class="item item-icon-left" ng-if="business.contact.formattedPhone != null" ng-href="tel: {{business.contact.phone}}">
                     <i class="icon ion-ios7-telephone"></i>
                     {{business.contact.formattedPhone}}
                 </a>

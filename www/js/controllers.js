@@ -1,9 +1,13 @@
 angular.module('starter.controllers', [])
 
     .controller('NavCtrl', function($scope, $rootScope, $state, $ionicViewService) {
-        // Nav back fix
+        // Nav back history fix
         $scope.goBack = function() {
             var stateId = $rootScope.$viewHistory.currentView.stateId;
+            // Go back to home if on login or register view
+            if ((stateId == "tab.login") || (stateId == "tab.register")) {
+                $state.go('tab.home', {});
+            }
             // If view is in card list then remove history and set back to dash view
             if (stateId == "tab.friends") {
                 // assign it as the current view (as far as history is concerned)
@@ -17,12 +21,92 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate) {
-        // Home login - should move to homectrl
-        $scope.login = function() {        
-            $state.go('tab.dash', {});
+    .controller('HomeCtrl', function($scope, $rootScope, $state) {
+        $scope.loginView = function() {
+            $state.go('tab.login', {});
         };
 
+        $scope.registerView = function() {
+            $state.go('tab.register', {});
+        };
+    })
+
+    .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
+        $scope.loginObj = {};
+        $scope.login = function() {  
+            $http({
+                method: 'GET',
+                url: 'http://cyberkronos.pythonanywhere.com/login?username=' + $scope.loginObj.username + '&password=' + $scope.loginObj.password
+            }).success(function(data){
+                console.log("successful database query");
+                if (data == "username and password combination is incorrect") {
+                    $ionicPopup.alert({
+                        title: 'Sorry!',
+                        template: data,
+                        buttons: [
+                            {
+                                text: 'Close',
+                                type: 'button-assertive'
+                            }
+                        ]
+                    });
+                }
+                else if (data == "incorrect password entered") {
+                    $ionicPopup.alert({
+                        title: 'Sorry!',
+                        template: data,
+                        buttons: [
+                            {
+                                text: 'Close',
+                                type: 'button-assertive'
+                            }
+                        ]
+                    });
+                } 
+                else {
+                    console.log(data);
+                    $state.go('tab.dash', {});
+                }
+            }).error(function() {
+                console.log("error");
+            }); 
+        };
+    })
+
+    .controller('RegisterCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
+        $scope.registerObj = {};
+        $scope.register = function() {  
+            var registerData = angular.toJson($scope.registerObj); 
+            $http({
+                method: 'POST',
+                url: 'http://cyberkronos.pythonanywhere.com/register',
+                data: registerData,
+                headers: { 'Content-Type': 'application/json' }
+            }).success(function(data){
+                console.log("successful database query");
+                console.log(registerData);
+                if (data == "username is taken") {
+                    $ionicPopup.alert({
+                        title: 'Sorry!',
+                        template: data,
+                        buttons: [
+                            {
+                                text: 'Close',
+                                type: 'button-assertive'
+                            }
+                        ]
+                    });
+                } else {
+                    console.log(data);
+                    $state.go('tab.dash', {});
+                }
+            }).error(function() {
+                console.log("error");
+            }); 
+        };
+    })
+
+    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate) {
         // Show and Hide Loading Overlay
         $scope.show = function() {
             $ionicLoading.show({
@@ -75,12 +159,18 @@ angular.module('starter.controllers', [])
         //     }
         // });
 
-        $scope.distanceList = [
-            { text: "0.5km", value: "500" },
-            { text: "2km", value: "2000" },
-            { text: "10km", value: "10000" },
-            { text: "15km", value: "15000" }
-        ];
+        // $scope.distanceList = [
+        //     { text: "0.5km", value: "500" },
+        //     { text: "2km", value: "2000" },
+        //     { text: "10km", value: "10000" },
+        //     { text: "15km", value: "15000" }
+        // ];
+
+        $scope.distanceList = {
+            min:'0',
+            max:'15',
+            value:'0.5'
+        }
 
         $scope.priceList = [
             { text: "$", value: "1" },
@@ -95,8 +185,8 @@ angular.module('starter.controllers', [])
 
         $scope.updateDistance = function(item) {
             // $window.localStorage.setItem( 'distance', item.value );
-            console.log(item.value);
-            $rootScope.searchCriteria['distance'] = item.value;
+            console.log(item);
+            $rootScope.searchCriteria['distance'] = item * 1000;
             console.log( 'Distance: ' + $rootScope.searchCriteria['distance'] );
         };
 

@@ -51,13 +51,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       templateUrl: "templates/tabs.html"
     })
 
-    // User login
+    // User login/register
     .state('tab.home', {
       url: '/home',
       views: {
         'tab-home': {
           templateUrl: 'templates/tab-home.html',
-          controller: 'DashCtrl'
+          controller: 'HomeCtrl'
+        }
+      }
+    })
+
+    .state('tab.login', {
+      url: '/home/login',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/tab-login.html',
+          controller: 'LoginCtrl'
+        }
+      }
+    })
+
+    .state('tab.register', {
+      url: '/home/register',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/tab-register.html',
+          controller: 'RegisterCtrl'
         }
       }
     })
