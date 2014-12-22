@@ -1,4 +1,4 @@
-/* Empty. Add your own CSS if you like */
+ /*Empty. Add your own CSS if you like */
 
 .swipe-card {
   display: none;
@@ -70,7 +70,7 @@
 }
 .item-radio input:checked ~ .item-content {
   /* style the item content when its checked */
-  background-color: #f0b840;
+  background-color: #EF4E3A;
   color: white;
 }
 
@@ -79,7 +79,7 @@
 }
 
 .button.button-positive.button-outline.active, .button.button-positive.button-outline.activated {
-  background-color: #4a87ee;
+  background-color: #EF4E3A;
   box-shadow: none;
   color: #fff; }
 

@@ -1,20 +1,21 @@
 <ion-view>
     
-    <div class="tabs-striped tabs-top tabs-background-energized tabs-light">
-        <div class="tabs">
-          <a class="tab-item active" href="#/tab/dash/friends/account">
+    <div class="tabs tabs-icon-top">
+          <a class="tab-item active" href="#/tab/dash/friends/account" style="color: rgb(204, 35, 17)">
             <i class="icon ion-spoon"></i>
+              Info
           </a>
           <a class="tab-item" href="#/tab/dash/friends/instagram">
             <i class="icon ion-social-instagram"></i>
+              Instagram
           </a>
           <a class="tab-item" href="#/tab/dash/friends/twitter">
             <i class="icon ion-social-twitter"></i>
+              Twitter
           </a>
-        </div>
     </div>
 
-    <ion-content style="padding-top:70px;">
+    <ion-content>
         <div class="list card">
             <div class="item item-divider">
                 <div class="padding-vertical">
@@ -24,11 +25,12 @@
 
             <div class="item item-text-wrap">
                 <div class="padding-vertical">
-                    <div style="display:inline-block; width:49%;">{{business.rating}}/10</div>
-                    <div style="display:inline-block; text-align:right; width:49%;">{{business.categories[0].name}}</div>
-                </div>
-                <div class="padding-vertical">
-                    <div>Price: {{business.price.message}}</div>
+                    <div ng-if="business.price.message != null">
+                        Price: {{business.price.message}}
+                    </div>
+                    <div ng-if="business.rating != null">
+                        Rating: {{business.rating}}/10
+                    </div>
                 </div>
                 <div class="padding-vertical">Today: {{ business.hours.status }}</div>
             </div>
@@ -37,7 +39,7 @@
                 <img src="img/img_placeholder.png">
             </div>
             <div class="item item-image" ng-if="business.photos.count != 0">
-                <img src="{{business.photos.groups[0].items[3].prefix}}300x300{{business.photos.groups[0].items[3].suffix}}">
+                <img src="{{business.photos.groups[0].items[0].prefix}}500x500{{business.photos.groups[0].items[0].suffix}}">
             </div>
 
             <div class="item item-divider">
@@ -52,50 +54,36 @@
                 <br/>
             </div>
 
+             <div class="item item-text-wrap" style="display: table; width: 100%;">
+                <div style="font-weight:bold;">Hours</div>
+                <div ng-repeat="hours in business.hours.timeframes">
+                    <div style="display: table-cell; min-width: 120px;">{{ hours.days }}</div> 
+                    <div style="display: table-cell;">{{ hours.open[0].renderedTime }}</div>
+                </div>
+            </div>
+
             <div>
-                <a href="{{ business.menu.mobileUrl }}" class="item item-icon-left">
-                    <i class="icon ion-home"></i>
+                <a ng-if="business.menu.mobileUrl != null" ng-click="openWebsite(business.menu.mobileUrl)" class="item item-icon-left">
+                    <i class="icon ion-ios7-paper"></i>
                     Menu
                 </a>
 
-                <a href="#" class="item item-icon-left">
+                <a ng-if="business.contact.formattedPhone != null" class="item item-icon-left">
                     <i class="icon ion-ios7-telephone"></i>
                     {{business.contact.formattedPhone}}
                 </a>
 
-                <a href="{{ business.url }}" class="item item-icon-left">
-                    <i class="icon ion-wifi"></i>
+                <a ng-if="business.url != null" ng-click="openWebsite(business.url)" class="item item-icon-left">
+                    <i class="icon ion-earth"></i>
                     Website
                 </a>
 
-                <a href="{{ business.reservations.url }}" class="item item-icon-left">
-                    <i class="icon ion-card"></i>
+                <a ng-if="business.reservations.url != null" ng-click="openWebsite(business.reservations.url)" class="item item-icon-left">
+                    <i class="icon ion-ios7-navigate"></i>
                     OpenTable Reservation
                 </a>
             </div>
-
-            <div class="item item-body">
-                <h3>
-                    {{business.tips.count}} Tips
-                </h3>
-                <br/>
-                <div ng-repeat="tip in business.tips.groups[0].items">
-                    <div>
-                        <div style="display:inline-block; width: 49%;">
-                            {{ tip.user.firstName }}
-                        </div>
-                        <div style="display:inline-block; width:49%; text-align:right;">
-                            {{ tip.likes.count }} Likes
-                        </div>
-                    </div>
-                    <br/>
-                    <div>
-                        {{ tip.text }}
-                    </div>
-                    <br/>
-                    <br/>
-                </div>
-            </div>
-
+        </div>
+        <br/>
     </ion-content>
 </ion-view>

@@ -25,16 +25,17 @@
     <script src="js/services.js"></script>
 
     <!-- Extensions -->
-    <script src="lib/ionic.swipecards.js"></script>
+    <!-- <script src="lib/ionic.swipecards.js"></script> -->
+    <script src="lib/ionic.swipecards.horizontal.js"></script>
     <script src="lib/tabSlideBox.js"></script>
 
   </head>
-  <body ng-app="starter" animation="slide-left-right-ios7">
+  <body ng-app="starter" animation="slide-left-right-ios7" ng-controller="NavCtrl">
     <!-- 
       The nav bar that will be updated as we navigate between views.
     -->
     <ion-nav-bar class="bar bar-header bar-assertive nav-title-slide">
-      <ion-nav-back-button class="button-icon icon ion-ios7-arrow-back">
+      <ion-nav-back-button class="button-icon icon ion-ios7-arrow-back" ng-click="goBack()">
         Back
       </ion-nav-back-button>
     </ion-nav-bar>

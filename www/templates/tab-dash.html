@@ -1,8 +1,8 @@
 <ion-view>
   	<ion-content scroll="false">
 	    <div>
-            <div style="background-image: url(img/blur_img.jpg); background-repeat: no-repeat; height: 58vh;">
-                <div style="position:absolute; top: 47vh; width: 100%; display: table; table-layout: fixed;">
+            <div style="background-image: url(img/blur_img.jpg); background-repeat: no-repeat; height: 50vh;">
+                <div style="position:absolute; top: 39vh; width: 100%; display: table; table-layout: fixed;">
                     <button style="display: table-cell; width: 44%; margin:0 3% 0 3%;" class="button button-block button-assertive" ng-click="doSubmit()">
                         All Cuisines
                     </button>
@@ -18,7 +18,11 @@
                 </div>
             </div>
             <div class="list list-inset">
-                <p>Distance (km)</p>
+              <p>Distance: {{distanceList.value}} km</p>
+              <div class="range range-assertive">
+                <input type="range" min="{{distanceList.min}}" max="{{distanceList.max}}" value="{{distanceList.value}}" step="0.5" ng-model="distanceList.value" ng-change="updateDistance(distanceList.value)">
+              </div>
+                <!-- <p>Distance (km)</p>
                 <div class="button-bar">
                     <ion-radio ng-repeat="item in distanceList"
                                ng-value="item.value"
@@ -28,7 +32,7 @@
                                name="radio1">
                       {{ item.text }}
                     </ion-radio>
-                </div>
+                </div> -->
             </div>
 
             <div class="list list-inset">

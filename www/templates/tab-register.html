@@ -1,0 +1,26 @@
+<ion-view>
+  <ion-content>
+  	<form ng-submit="register()">
+	    <div class="list list-inset">
+	  		<label class="item item-input">
+	    		<input type="text" placeholder="First Name" ng-model="registerObj.firstname">
+	  		</label>
+			<label class="item item-input">
+				<input type="text" placeholder="Last Name" ng-model="registerObj.lastname">
+			</label>
+			<label class="item item-input">
+				<input type="email" placeholder="Email" ng-model="registerObj.email">
+			</label>
+			<label class="item item-input">
+				<input type="text" placeholder="Username" ng-model="registerObj.username">
+			</label>
+			<label class="item item-input">
+				<input type="password" placeholder="Password" ng-model="registerObj.password">
+			</label>
+		</div>
+	    <div class="padding">
+	      <button class="button button-block button-assertive activated">Register</button>
+	    </div>
+	</form>
+  </ion-content>
+</ion-view>
