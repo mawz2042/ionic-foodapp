@@ -4,19 +4,25 @@ angular.module('starter.controllers', [])
         // Nav back history fix
         $scope.goBack = function() {
             var stateId = $rootScope.$viewHistory.currentView.stateId;
+            var backViewId = $rootScope.$viewHistory.currentView.backViewId;
+            console.log($rootScope.$viewHistory.currentView);
             // Go back to home if on login or register view
             if ((stateId == "tab.login") || (stateId == "tab.register")) {
                 $state.go('tab.home', {});
             }
             // If view is in card list then remove history and set back to dash view
-            if (stateId == "tab.friends") {
+            if (stateId == "tab.friends" || stateId == "tab.profile") {
                 // assign it as the current view (as far as history is concerned)
                 $ionicViewService.setNavViews("008"); 
                 $state.go('tab.dash', {});
             }
-            // If view is in any of the tabbed pages, set back to card lsit
+            // If view is in any of the tabbed pages, set back to card list
             if ((stateId == "tab.account") || (stateId == "tab.instagram") || (stateId == "tab.twitter")) {
-                $state.go('tab.friends', {});
+                if ((stateId == "tab.account") && (backViewId == "00E")) {
+                    $state.go('tab.profile', {});
+                } else {
+                    $state.go('tab.friends', {});
+                }
             }
         };
     })
@@ -31,82 +37,89 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
+    .controller('LoginCtrl', function($scope, $rootScope, $state, $http, Alerts, Users) {
         $scope.loginObj = {};
-        $scope.login = function() {  
-            $http({
-                method: 'GET',
-                url: 'http://cyberkronos.pythonanywhere.com/login?username=' + $scope.loginObj.username + '&password=' + $scope.loginObj.password
-            }).success(function(data){
-                console.log("successful database query");
-                if (data == "username and password combination is incorrect") {
-                    $ionicPopup.alert({
-                        title: 'Sorry!',
-                        template: data,
-                        buttons: [
-                            {
-                                text: 'Close',
-                                type: 'button-assertive'
-                            }
-                        ]
-                    });
-                }
-                else if (data == "incorrect password entered") {
-                    $ionicPopup.alert({
-                        title: 'Sorry!',
-                        template: data,
-                        buttons: [
-                            {
-                                text: 'Close',
-                                type: 'button-assertive'
-                            }
-                        ]
-                    });
-                } 
-                else {
-                    console.log(data);
-                    $state.go('tab.dash', {});
-                }
+        $scope.login = function() {
+            Users.login($scope.loginObj.username, $scope.loginObj.password)
+            .success(function(data){
+                $rootScope.currentUser = data;
+                console.log($rootScope.currentUser);
+                $state.go('tab.dash', {});
             }).error(function() {
                 console.log("error");
-            }); 
+                var message = 'Incorrect username and password combination';
+                Alerts.error(message);
+            });  
         };
     })
 
-    .controller('RegisterCtrl', function($scope, $rootScope, $state, $http, $ionicPopup) {
+    .controller('RegisterCtrl', function($scope, $rootScope, $state, $http, Alerts, Users) {
         $scope.registerObj = {};
         $scope.register = function() {  
-            var registerData = angular.toJson($scope.registerObj); 
-            $http({
-                method: 'POST',
-                url: 'http://cyberkronos.pythonanywhere.com/register',
-                data: registerData,
-                headers: { 'Content-Type': 'application/json' }
-            }).success(function(data){
-                console.log("successful database query");
-                console.log(registerData);
-                if (data == "username is taken") {
-                    $ionicPopup.alert({
-                        title: 'Sorry!',
-                        template: data,
-                        buttons: [
-                            {
-                                text: 'Close',
-                                type: 'button-assertive'
-                            }
-                        ]
-                    });
-                } else {
-                    console.log(data);
-                    $state.go('tab.dash', {});
-                }
+            Users.register($scope.registerObj)
+            .success(function(data){
+                console.log(data);
+                $state.go('tab.dash', {});
             }).error(function() {
-                console.log("error");
-            }); 
+                var message = 'Username is taken';
+                Alerts.error(message);
+            });
         };
     })
 
-    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate) {
+    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, Alerts, Favourites, Foursquare, Twitter) {
+        $rootScope.getFavouritesList = { 
+            $relatedTo: {
+                object: {
+                    __type: "Pointer",
+                    className: "_User",
+                    objectId: $rootScope.currentUser['objectId']
+                },
+                key: "favourites"
+            }
+        }
+        $scope.profile = function() { 
+            Favourites.getAll($rootScope.getFavouritesList).success(function(data) {
+                $rootScope.favouritePlaces = data['results'];
+                $state.go('tab.profile', {}); 
+            }).error(function() {
+                var message = 'Could not retrieve favourite list';
+                Alerts.error(message);
+            });
+        };
+        $scope.goToFavourite = function(restaurantId) {
+            $rootScope.searchCriteria['id'] = restaurantId;
+            var favouriteId = {
+                id: $rootScope.searchCriteria['id']
+            };
+            Foursquare.details(favouriteId).success(function(data){
+                $rootScope.business = data.response.venue;
+                console.log($rootScope.business);
+
+                // All Photos
+                Foursquare.photos(favouriteId).success(function(data){
+                    $rootScope.photos = data;
+                    console.log($rootScope.photos);
+                }).error(function(data){
+                    console.log("there is an error");
+                });
+
+                $state.go('tab.account', {});
+            }).error(function(data){
+                var message = 'Could not retrieve restaurant details';
+                Alerts.error(message);
+            });
+        };
+    })
+
+    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, Alerts, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate, Favourites, Foursquare) {
+        // Preload the foursquare cuisine types
+        Foursquare.cuisines().success(function(data){
+            $rootScope.cuisines = data.response.categories[3].categories;
+        }).error(function(err) {
+            console.log("failed");
+        });
+
         // Show and Hide Loading Overlay
         $scope.show = function() {
             $ionicLoading.show({
@@ -133,21 +146,22 @@ angular.module('starter.controllers', [])
         };
 
         // Geolocation to get location position
-            navigator.geolocation.getCurrentPosition(function(position) {
-                $scope.position=position;
-                $scope.$apply();
-                $rootScope.searchCriteria = {
-                    counter: '',
-                    name: '',
-                    id: '',
-                    twitter: '',
-                    price: '',
-                    distance: '',
-                    cuisineId: '',
-                    latitude: $scope.position.coords.latitude,
-                    longitude: $scope.position.coords.longitude
-                }
-            },function(e) { console.log("Error retrieving position " + e.code + " " + e.message) });
+        navigator.geolocation.getCurrentPosition(function(position) {
+            $scope.position=position;
+            $scope.$apply();
+            $rootScope.searchCriteria = {
+                counter: '',
+                name: '',
+                restaurantName: '',
+                id: '',
+                twitter: '',
+                price: '',
+                distance: '',
+                cuisineId: '',
+                latitude: $scope.position.coords.latitude,
+                longitude: $scope.position.coords.longitude
+            }
+        },function(e) { console.log("Error retrieving position " + e.code + " " + e.message) });
 
         // $ionicPlatform.ready(function() {
         //     if ( ! $window.localStorage.getItem( 'distance' ) ) {
@@ -198,16 +212,6 @@ angular.module('starter.controllers', [])
         };
 
         $scope.showPopup = function() {
-            $http({
-                method: 'GET',
-                url: 'https://api.foursquare.com/v2/venues/categories?oauth_token=RGT5ZXHWBGVROTMD1ETZN1GMK0CLTNQEBYMUHEC3OY4XAQDQ&v=20141020'
-            }).success(function(data){
-                $rootScope.cuisines = data.response.categories[3].categories;
-                // console.log($rootScope.cuisines);
-            }).error(function(err) {
-                console.log("failed");
-            });
-
             $scope.cuisineId = {
                 type: ''
             };
@@ -240,12 +244,14 @@ angular.module('starter.controllers', [])
         $scope.doSubmit = function() {
             console.log($rootScope.searchCriteria);
             $scope.show();
-            $http({
-                method: 'POST',
-                url: 'http://www.gamehub.ca/foodapp/foursquare.php',
-                data: $rootScope.searchCriteria,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-            }).success(function(data){
+
+            Favourites.getAll($rootScope.getFavouritesList).success(function(data) {
+                console.log(data);
+            }).error(function() {
+                console.log("Could not retrieve favourite list");
+            });
+
+            Foursquare.list($rootScope.searchCriteria).success(function(data){
                 console.log("success");
                 $rootScope.cardTypes = [];
                 console.log(data);
@@ -256,6 +262,7 @@ angular.module('starter.controllers', [])
                 if($rootScope.cardTypes != "") {
                     console.log($rootScope.cardTypes);
                     $rootScope.searchCriteria['id'] = $rootScope.cardTypes[0].id;
+                    $rootScope.searchCriteria['restaurantName'] = $rootScope.cardTypes[0].name;
 
                     $rootScope.cards = Array.prototype.slice.call($rootScope.cardTypes, 0, 0);
 
@@ -266,30 +273,14 @@ angular.module('starter.controllers', [])
                     $state.go('tab.friends', {});
                 } else {
                     $scope.hide();
-                    var errorPopup = $ionicPopup.alert({
-                        title: 'Sorry!',
-                        template: "No results could be found",
-                        buttons: [
-                            {
-                                text: 'Close',
-                                type: 'button-assertive'
-                            }
-                        ]
-                    });
+                    var message = 'No results could be found';
+                    Alerts.error(message);
                 }
             }).error(function(err) {
                 $scope.hide();
                 // show error
-                var errorPopup = $ionicPopup.alert({
-                    title: 'Sorry!',
-                    template: "Something has gone wrong! <br/> Could not establish connection",
-                    buttons: [
-                      {
-                        text: 'Close',
-                        type: 'button-assertive'
-                      }
-                    ]
-                });
+                var message = 'Something has gone wrong! <br/> Could not establish connection';
+                Alerts.error(message);
             });
         };
 
@@ -298,7 +289,7 @@ angular.module('starter.controllers', [])
         }
     })
 
-    .controller('FriendsCtrl', function($scope, $http, $rootScope, $state, $ionicLoading, $ionicSwipeCardDelegate) {
+    .controller('FriendsCtrl', function($scope, $http, $rootScope, $state, $ionicLoading, $ionicSwipeCardDelegate, Favourites, Foursquare, Twitter) {
         $scope.show = function() {
             $ionicLoading.show({
                 template: 'Getting Restaurant Details'
@@ -334,9 +325,12 @@ angular.module('starter.controllers', [])
 
                 // Assign id to search query
                 $rootScope.searchCriteria['id'] = newCard.id;
+                $rootScope.searchCriteria['restaurantName'] = newCard.name;
+
                 console.log($rootScope.searchCriteria['id']);
+                console.log($rootScope.searchCriteria['restaurantName']);
             }
-            // save the index for reentry
+            // save the index for reentry - going back from details tab
             $rootScope.lastSavedIndex = $scope.counter;
         };
 
@@ -347,23 +341,14 @@ angular.module('starter.controllers', [])
 
         $scope.restaurantSubmit = function() {
             $scope.show();
-            $http({
-                method: 'POST',
-                url: 'http://www.gamehub.ca/foodapp/foursquareDetails.php',
-                data: $rootScope.searchCriteria,
-                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-            }).success(function(data){
+            // Should make into seperate function to call
+            Foursquare.details($rootScope.searchCriteria).success(function(data){
                 $scope.hide();
                 $rootScope.business = data.response.venue;
                 console.log($rootScope.business);
 
                 // All Photos
-                $http({
-                    method: 'POST',
-                    url: 'http://www.gamehub.ca/foodapp/foursquarePhotoDetails.php',
-                    data: $rootScope.searchCriteria,
-                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                }).success(function(data){
+                Foursquare.photos($rootScope.searchCriteria).success(function(data){
                     $rootScope.photos = data;
                     console.log($rootScope.photos);
                 }).error(function(data){
@@ -375,12 +360,8 @@ angular.module('starter.controllers', [])
                 // Twitter API
                 $rootScope.searchCriteria['name'] = $rootScope.business.name;
                 $rootScope.searchCriteria['twitter'] = $rootScope.business.contact.twitter;
-                $http({
-                    method: 'POST',
-                    url: 'http://www.gamehub.ca/foodapp/twitterApi.php',
-                    data: $rootScope.searchCriteria,
-                    headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
-                }).success(function(data){
+
+                Twitter.tweets($rootScope.searchCriteria).success(function(data){
                     $rootScope.twitter = data;
                     console.log($rootScope.twitter);
                 }).error(function(data){
@@ -392,15 +373,78 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('AccountCtrl', function($scope, $rootScope) {
+    .controller('AccountCtrl', function($scope, $rootScope, Favourites) {
         $scope.openWebsite = function(link) {
             console.log(link);
             window.open(link, '_blank', 'location=yes');
         }
-    })
 
-    .controller('TwitterCtrl', function($scope) {
+        // Check if the restaurant is favourited - SHOULD CHANGE TO A RELATIONAL QUERY
+        var getFavouritePlace = { 
+            foursquarePlaceId: $rootScope.searchCriteria['id'] ,
+            username: $rootScope.currentUser['username']
+        };
+        Favourites.get(getFavouritePlace).success(function(data) {
+            var favouritePlace = data['results'];
+            console.log("test:" + favouritePlace[0]);
+            if (favouritePlace[0] == undefined) {
+                $scope.favouriteIcon = "icon ion-ios-star-outline"
+            } else {
+                $scope.favouriteIcon = "icon ion-ios-star"
+                $scope.objectId = favouritePlace[0]['objectId'];
+            }
+        }).error(function() {
+            console.log("could not get favourite place");
+        });
+
+        $scope.addToFavourites = function() {
+            if ($scope.favouriteIcon == "icon ion-ios-star-outline") {
+                // Add favourite restaurant to db
+                var favouritePlace = {
+                    foursquarePlaceId: $rootScope.searchCriteria['id'],
+                    restaurantName: $rootScope.searchCriteria['restaurantName'],
+                    username: $rootScope.currentUser['username'],
+                    restaurantThumbnail: $rootScope.business.photos.groups[0].items[0].prefix + "100x100" + $rootScope.business.photos.groups[0].items[0].suffix
+                };
+                Favourites.add(favouritePlace).success(function(data){
+                    console.log(data);
+                    
+                    $scope.objectId = data['objectId'];
+                    console.log($scope.objectId);
+
+                    // Link favourite restaurant to user
+                    var linkFavouritePlace = {
+                        favourites: {
+                            __op: "AddRelation",
+                            objects: [{
+                                __type: "Pointer",
+                                className: "Favourites",
+                                objectId: data['objectId']
+                            }]
+                        }
+                    };
+                    Favourites.link($rootScope.currentUser['sessionToken'], $rootScope.currentUser['objectId'], linkFavouritePlace).success(function(data){
+                        console.log(data);
+                        $scope.favouriteIcon = "icon ion-ios-star";
+                    }).error(function() {
+                        console.log("Could not link favourite entry to user");
+                    });
+                }).error(function() {
+                    console.log("Could not add favourite entry to database");
+                });   
+            } else {
+                Favourites.delete($scope.objectId).success(function(data){
+                    console.log(data);
+                    $scope.favouriteIcon = "icon ion-ios-star-outline";
+                }).error(function() {
+                    console.log("Could not remove favourite restaurant");
+                });
+            }
+        };
     })
 
     .controller('InstagramCtrl', function($scope) {
+    })
+
+    .controller('TwitterCtrl', function($scope) {
     });

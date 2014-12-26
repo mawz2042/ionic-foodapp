@@ -1,5 +1,10 @@
 <ion-view>
-    
+    <ion-nav-buttons side="right">
+      <button class="button" style="border:none;" ng-click="addToFavourites()" >
+        <i class="{{ favouriteIcon }}"></i>
+      </button>
+    </ion-nav-buttons>
+
     <div class="tabs tabs-icon-top">
           <a class="tab-item active" href="#/tab/dash/friends/account" style="color: rgb(204, 35, 17)">
             <i class="icon ion-spoon"></i>
@@ -52,6 +57,9 @@
                     {{business.location.country}}
                 </div>
                 <br/>
+            </div>
+            <div class="item item-image">
+                <img src="https://api.tiles.mapbox.com/v4/cyberkronos.kjdbl1id/pin-l-restaurant+F52636({{business.location.lng}},{{business.location.lat}})/{{business.location.lng}},{{business.location.lat}},17/400x250.png?access_token=pk.eyJ1IjoiY3liZXJrcm9ub3MiLCJhIjoia3RMOFJ5byJ9.Nvqs957NLHa4w5eV1IcjmQ">
             </div>
 
              <div class="item item-text-wrap" style="display: table; width: 100%;">
