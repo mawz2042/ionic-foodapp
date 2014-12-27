@@ -6,15 +6,15 @@
     </ion-nav-buttons>
 
     <div class="tabs tabs-icon-top">
-          <a class="tab-item active" href="#/tab/dash/friends/account" style="color: rgb(204, 35, 17)">
+          <a class="tab-item active" href="#/tab/dash/list/details" style="color: rgb(204, 35, 17)">
             <i class="icon ion-spoon"></i>
               Info
           </a>
-          <a class="tab-item" href="#/tab/dash/friends/instagram">
+          <a class="tab-item" href="#/tab/dash/list/instagram">
             <i class="icon ion-social-instagram"></i>
               Instagram
           </a>
-          <a class="tab-item" href="#/tab/dash/friends/twitter">
+          <a class="tab-item" href="#/tab/dash/list/twitter">
             <i class="icon ion-social-twitter"></i>
               Twitter
           </a>
@@ -58,7 +58,7 @@
                 </div>
                 <br/>
             </div>
-            <div class="item item-image">
+            <div class="item item-image" ng-click="goToMap()">
                 <img src="https://api.tiles.mapbox.com/v4/cyberkronos.kjdbl1id/pin-l-restaurant+F52636({{business.location.lng}},{{business.location.lat}})/{{business.location.lng}},{{business.location.lat}},17/400x250.png?access_token=pk.eyJ1IjoiY3liZXJrcm9ub3MiLCJhIjoia3RMOFJ5byJ9.Nvqs957NLHa4w5eV1IcjmQ">
             </div>
 

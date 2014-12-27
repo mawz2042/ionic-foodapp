@@ -103,26 +103,35 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
 
-    .state('tab.friends', {
-      url: '/dash/friends',
+    .state('tab.list', {
+      url: '/dash/list',
       views: {
         'tab-dash': {
-          templateUrl: 'templates/tab-friends.html',
-          controller: 'FriendsCtrl'
+          templateUrl: 'templates/tab-list.html',
+          controller: 'ListCtrl'
         }
       }
     })
-    .state('tab.account', {
-      url: '/dash/friends/account',
+    .state('tab.details', {
+      url: '/dash/list/details',
       views: {
         'tab-dash': {
-          templateUrl: 'templates/tab-account.html',
-          controller: 'AccountCtrl'
+          templateUrl: 'templates/tab-details.html',
+          controller: 'DetailsCtrl'
+        }
+      }
+    })
+    .state('tab.map', {
+      url: '/dash/list/details/map',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tab-map.html',
+          controller: 'MapCtrl'
         }
       }
     })
     .state('tab.twitter', {
-      url: '/dash/friends/twitter',
+      url: '/dash/list/twitter',
       views: {
         'tab-dash': {
           templateUrl: 'templates/tab-twitter.html',
@@ -131,7 +140,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
     .state('tab.instagram', {
-      url: '/dash/friends/instagram',
+      url: '/dash/list/instagram',
       views: {
         'tab-dash': {
           templateUrl: 'templates/tab-instagram.html',

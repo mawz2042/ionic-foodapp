@@ -11,17 +11,21 @@ angular.module('starter.controllers', [])
                 $state.go('tab.home', {});
             }
             // If view is in card list then remove history and set back to dash view
-            if (stateId == "tab.friends" || stateId == "tab.profile") {
+            if (stateId == "tab.list" || stateId == "tab.profile") {
                 // assign it as the current view (as far as history is concerned)
                 $ionicViewService.setNavViews("008"); 
                 $state.go('tab.dash', {});
             }
+            // If view is in map, go back to details
+            if (stateId == "tab.map") {
+                $state.go('tab.details', {});
+            }
             // If view is in any of the tabbed pages, set back to card list
-            if ((stateId == "tab.account") || (stateId == "tab.instagram") || (stateId == "tab.twitter")) {
-                if ((stateId == "tab.account") && (backViewId == "00E")) {
+            if ((stateId == "tab.details") || (stateId == "tab.instagram") || (stateId == "tab.twitter")) {
+                if ((stateId == "tab.details") && (backViewId == "00E")) {
                     $state.go('tab.profile', {});
                 } else {
-                    $state.go('tab.friends', {});
+                    $state.go('tab.list', {});
                 }
             }
         };
@@ -67,7 +71,7 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, Alerts, Favourites, Foursquare, Twitter) {
+    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, $ionicLoading, Loading, Alerts, Favourites, Foursquare, Twitter) {
         $rootScope.getFavouritesList = { 
             $relatedTo: {
                 object: {
@@ -88,11 +92,13 @@ angular.module('starter.controllers', [])
             });
         };
         $scope.goToFavourite = function(restaurantId) {
+            Loading.show('Getting Restaurant Details');
             $rootScope.searchCriteria['id'] = restaurantId;
             var favouriteId = {
                 id: $rootScope.searchCriteria['id']
             };
             Foursquare.details(favouriteId).success(function(data){
+                $ionicLoading.hide();
                 $rootScope.business = data.response.venue;
                 console.log($rootScope.business);
 
@@ -104,31 +110,23 @@ angular.module('starter.controllers', [])
                     console.log("there is an error");
                 });
 
-                $state.go('tab.account', {});
+                $state.go('tab.details', {});
             }).error(function(data){
+                $ionicLoading.hide();
                 var message = 'Could not retrieve restaurant details';
                 Alerts.error(message);
             });
         };
     })
 
-    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, Alerts, $ionicPlatform, $ionicLoading, $ionicSwipeCardDelegate, Favourites, Foursquare) {
+    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, Alerts, $ionicPlatform, $ionicLoading, Loading, $ionicSwipeCardDelegate, Favourites, Foursquare) {
         // Preload the foursquare cuisine types
-        Foursquare.cuisines().success(function(data){
+        Foursquare.cuisines().success(function(data) {
             $rootScope.cuisines = data.response.categories[3].categories;
         }).error(function(err) {
             console.log("failed");
         });
 
-        // Show and Hide Loading Overlay
-        $scope.show = function() {
-            $ionicLoading.show({
-                template: 'Finding the Best Locations'
-            });
-        };
-        $scope.hide = function() {
-            $ionicLoading.hide();
-        };
         // List of demand headings
         $rootScope.demandTitles = [
             "Go To",
@@ -215,7 +213,6 @@ angular.module('starter.controllers', [])
             $scope.cuisineId = {
                 type: ''
             };
-
             // Select cuisine popup
             var myPopup = $ionicPopup.show({
                 templateUrl: 'templates/popup-cuisines.html',
@@ -243,7 +240,7 @@ angular.module('starter.controllers', [])
         // AJAX call for getting list of restaurants
         $scope.doSubmit = function() {
             console.log($rootScope.searchCriteria);
-            $scope.show();
+            Loading.show('Finding the Best Locations');
 
             Favourites.getAll($rootScope.getFavouritesList).success(function(data) {
                 console.log(data);
@@ -267,17 +264,17 @@ angular.module('starter.controllers', [])
                     $rootScope.cards = Array.prototype.slice.call($rootScope.cardTypes, 0, 0);
 
                     $rootScope.ranDemandTitle();
-                    $scope.hide();
+                    $ionicLoading.hide();
                     // Reset the saved index for new search
                     $rootScope.lastSavedIndex = null;
-                    $state.go('tab.friends', {});
+                    $state.go('tab.list', {});
                 } else {
-                    $scope.hide();
+                    $ionicLoading.hide();
                     var message = 'No results could be found';
                     Alerts.error(message);
                 }
             }).error(function(err) {
-                $scope.hide();
+                $ionicLoading.hide();
                 // show error
                 var message = 'Something has gone wrong! <br/> Could not establish connection';
                 Alerts.error(message);
@@ -285,21 +282,11 @@ angular.module('starter.controllers', [])
         };
 
         $scope.selectCuisine = function() {
-            $state.go('tab.friends', {});
+            $state.go('tab.list', {});
         }
     })
 
-    .controller('FriendsCtrl', function($scope, $http, $rootScope, $state, $ionicLoading, $ionicSwipeCardDelegate, Favourites, Foursquare, Twitter) {
-        $scope.show = function() {
-            $ionicLoading.show({
-                template: 'Getting Restaurant Details'
-            });
-        };
-
-        $scope.hide = function() {
-            $ionicLoading.hide();
-        };
-
+    .controller('ListCtrl', function($scope, $http, $rootScope, $state, $ionicLoading, Loading, $ionicSwipeCardDelegate, Favourites, Foursquare, Twitter) {
         // Initilization counter
         $scope.counter = 0;
         $scope.cardSwiped = function(index) {
@@ -340,10 +327,10 @@ angular.module('starter.controllers', [])
         };
 
         $scope.restaurantSubmit = function() {
-            $scope.show();
+            Loading.show('Getting Restaurant Details');
             // Should make into seperate function to call
             Foursquare.details($rootScope.searchCriteria).success(function(data){
-                $scope.hide();
+                $ionicLoading.hide();
                 $rootScope.business = data.response.venue;
                 console.log($rootScope.business);
 
@@ -355,7 +342,7 @@ angular.module('starter.controllers', [])
                     console.log("there is an error");
                 });
 
-                $state.go('tab.account', {});
+                $state.go('tab.details', {});
 
                 // Twitter API
                 $rootScope.searchCriteria['name'] = $rootScope.business.name;
@@ -373,7 +360,7 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('AccountCtrl', function($scope, $rootScope, Favourites) {
+    .controller('DetailsCtrl', function($scope, $rootScope, $state, Favourites) {
         $scope.openWebsite = function(link) {
             console.log(link);
             window.open(link, '_blank', 'location=yes');
@@ -440,6 +427,42 @@ angular.module('starter.controllers', [])
                     console.log("Could not remove favourite restaurant");
                 });
             }
+        };
+
+        $scope.goToMap = function() {
+            $state.go('tab.map', {});
+        }
+    })
+
+    .controller('MapCtrl', function($scope, $rootScope, $ionicLoading, $compile) {
+        $scope.init = function() {
+            var myLatlng = new google.maps.LatLng($rootScope.business.location.lat,$rootScope.business.location.lng);
+
+            var mapOptions = {
+              center: myLatlng,
+              zoom: 16,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            //Marker + infowindow + angularjs compiled ng-click
+            var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+            var compiled = $compile(contentString)($scope);
+
+            var infowindow = new google.maps.InfoWindow({
+              content: compiled[0]
+            });
+
+            var marker = new google.maps.Marker({
+              position: myLatlng,
+              map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.open(map,marker);
+            });
+
+            $scope.map = map;
         };
     })
 

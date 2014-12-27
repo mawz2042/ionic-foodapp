@@ -137,6 +137,16 @@ angular.module('starter.services', [])
   }
 }])
 
+.factory('Loading', ['$ionicLoading', function($ionicLoading) {
+  return {
+    show: function(message) {
+      return $ionicLoading.show({
+        template: message
+      });
+    }
+  }
+}])
+
 .value('PARSE_CREDENTIALS', {
   APP_ID: 'g3pJuFTV11d3QNG1zSGsn0Ea6b8OiYEve5gCXQWp',
   REST_API_KEY: 'HUctvqL7aK11lHmkJJMTlYUO95FiXRUmRGEj31tm'
