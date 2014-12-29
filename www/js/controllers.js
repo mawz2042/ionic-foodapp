@@ -4,14 +4,13 @@ angular.module('starter.controllers', [])
         // Nav back history fix
         $scope.goBack = function() {
             var stateId = $rootScope.$viewHistory.currentView.stateId;
-            var backViewId = $rootScope.$viewHistory.currentView.backViewId;
-            console.log($rootScope.$viewHistory.currentView);
+            console.log($rootScope.$viewHistory.currentView); 
             // Go back to home if on login or register view
             if ((stateId == "tab.login") || (stateId == "tab.register")) {
                 $state.go('tab.home', {});
             }
             // If view is in card list then remove history and set back to dash view
-            if (stateId == "tab.list" || stateId == "tab.profile") {
+            if (stateId == "tab.list" || stateId == "tab.profile") { 
                 // assign it as the current view (as far as history is concerned)
                 $ionicViewService.setNavViews("008"); 
                 $state.go('tab.dash', {});
@@ -22,7 +21,7 @@ angular.module('starter.controllers', [])
             }
             // If view is in any of the tabbed pages, set back to card list
             if ((stateId == "tab.details") || (stateId == "tab.instagram") || (stateId == "tab.twitter")) {
-                if ((stateId == "tab.details") && (backViewId == "00E")) {
+                if ($rootScope.lastViewHistory == "tab.profile") {
                     $state.go('tab.profile', {});
                 } else {
                     $state.go('tab.list', {});
@@ -44,8 +43,7 @@ angular.module('starter.controllers', [])
     .controller('LoginCtrl', function($scope, $rootScope, $state, $http, Alerts, Users) {
         $scope.loginObj = {};
         $scope.login = function() {
-            Users.login($scope.loginObj.username, $scope.loginObj.password)
-            .success(function(data){
+            Users.login($scope.loginObj.username, $scope.loginObj.password).success(function(data){
                 $rootScope.currentUser = data;
                 console.log($rootScope.currentUser);
                 $state.go('tab.dash', {});
@@ -59,11 +57,32 @@ angular.module('starter.controllers', [])
 
     .controller('RegisterCtrl', function($scope, $rootScope, $state, $http, Alerts, Users) {
         $scope.registerObj = {};
-        $scope.register = function() {  
-            Users.register($scope.registerObj)
-            .success(function(data){
+        $scope.register = function() {
+            // NEED TO CHANGE ALL OF THIS
+            // Register user 
+            Users.register($scope.registerObj).success(function(data){
                 console.log(data);
-                $state.go('tab.dash', {});
+
+                // Get user
+                Users.getUser(data['objectId']).success(function(data){
+                    console.log(data);
+
+                    // Log user in 
+                    Users.login(data['username'], $scope.registerObj.password).success(function(data){
+                        $rootScope.currentUser = data;
+                        console.log($rootScope.currentUser);
+                        $state.go('tab.dash', {});
+                    }).error(function() {
+                        console.log("error");
+                        var message = 'Incorrect username and password combination';
+                        Alerts.error(message);
+                    });
+
+                }).error(function() {
+                    var message = 'error';
+                    Alerts.error(message);
+                });
+
             }).error(function() {
                 var message = 'Username is taken';
                 Alerts.error(message);
@@ -71,7 +90,11 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, $ionicLoading, Loading, Alerts, Favourites, Foursquare, Twitter) {
+    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, $ionicLoading, $ionicViewService, Loading, Alerts, Favourites, Foursquare, Twitter) {
+        // Save profile stateId history
+        $rootScope.lastViewHistory = $rootScope.$viewHistory.currentView.stateId;
+        console.log($rootScope.lastViewHistory);
+
         $rootScope.getFavouritesList = { 
             $relatedTo: {
                 object: {
@@ -133,7 +156,7 @@ angular.module('starter.controllers', [])
             "Indulge At",
             "Try",
             "You're Going To",
-            "Your Stomach Is Calling",
+            "Stomach Is Calling",
             "It's Time 2 Go To"
         ];
         // Randomize the list of demands
@@ -286,7 +309,11 @@ angular.module('starter.controllers', [])
         }
     })
 
-    .controller('ListCtrl', function($scope, $http, $rootScope, $state, $ionicLoading, Loading, $ionicSwipeCardDelegate, Favourites, Foursquare, Twitter) {
+    .controller('ListCtrl', function($scope, $http, $rootScope, $state, $ionicViewService, $ionicLoading, Loading, $ionicSwipeCardDelegate, Favourites, Foursquare, Twitter) {
+        // Save list stateId history
+        $rootScope.lastViewHistory = $rootScope.$viewHistory.currentView.stateId;
+        console.log($rootScope.lastViewHistory);
+
         // Initilization counter
         $scope.counter = 0;
         $scope.cardSwiped = function(index) {

@@ -5,8 +5,8 @@
         <!-- First card - TRY TO MERGE INTO ONE - this is a hack -->
           <swipe-card ng-if="lastSavedIndex == null" on-card-swipe="cardSwiped()" style="min-height:auto; min-width:300px;" id="start-card" >
             <div class="list card">
-                <div class="item item-divider" style="font-size:24px;">
-                    {{demandTitle}}:
+                <div class="item item-divider" style="font-size:24px; text-align:center;">
+                    {{demandTitle}}
                 </div>
 
                 <div class="item item-text-wrap">
@@ -40,8 +40,8 @@
           <!-- Rest of cards -->
           <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)" style="min-height:auto; min-width:300px;">
             <div class="list card">
-                <div class="item item-divider" style="font-size:24px;">
-                    {{demandTitle}}:
+                <div class="item item-divider" style="font-size:24px; text-align:center;">
+                    {{demandTitle}} 
                 </div>
 
                 <div class="item item-text-wrap">

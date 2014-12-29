@@ -5,8 +5,8 @@
         <!-- First card - TRY TO MERGE INTO ONE - this is a hack -->
           <swipe-card ng-if="lastSavedIndex == null" on-card-swipe="cardSwiped()" style="min-height:auto; min-width:300px;" id="start-card" >
             <div class="list card">
-                <div class="item item-divider" style="font-size:24px;">
-                    {{demandTitle}}:
+                <div class="item item-divider" style="font-size:24px; text-align:center;">
+                    {{demandTitle}}
                 </div>
 
                 <div class="item item-text-wrap">
@@ -29,7 +29,7 @@
                     </div>
 
                     <div style="position:absolute;bottom: 0;z-index: 1000;width: 100%;background-color: rgba(0, 0, 0, 0.7); text-align:center; vertical-align:middle;">
-                        <div style="margin: 5px;" ng-click="restaurantSubmit()">
+                        <div style="margin: 5px; display: inline-block;" ng-click="restaurantSubmit()">
                             <i class="icon ion-information-circled" style="font-size: 30px; color: #ffffff;"></i>
                         </div>
                     </div>
@@ -40,8 +40,8 @@
           <!-- Rest of cards -->
           <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)" style="min-height:auto; min-width:300px;">
             <div class="list card">
-                <div class="item item-divider" style="font-size:24px;">
-                    {{demandTitle}}:
+                <div class="item item-divider" style="font-size:24px; text-align:center;">
+                    {{demandTitle}} 
                 </div>
 
                 <div class="item item-text-wrap">
@@ -64,9 +64,9 @@
                     </div>
 
                     <div style="position:absolute;bottom: 0;z-index: 1000;width: 100%;background-color: rgba(0, 0, 0, 0.7); text-align:center; vertical-align:middle;">
-                        <button  class="button button-assertive" ng-click="restaurantSubmit()" style="margin: 5px;">
-                            Take me here!
-                        </button>
+                        <div style="margin: 5px; display: inline-block;" ng-click="restaurantSubmit()">
+                            <i class="icon ion-information-circled" style="font-size: 30px; color: #ffffff;"></i>
+                        </div>
                     </div>
                 </div>
 

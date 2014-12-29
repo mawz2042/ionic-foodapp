@@ -1,15 +1,32 @@
 angular.module('starter.services', [])
 
+// .factory('$localstorage', ['$window', function($window) {
+//   return {
+//     set: function(key, value) {
+//       $window.localStorage[key] = value;
+//     },
+//     get: function(key, defaultValue) {
+//       return $window.localStorage[key] || defaultValue;
+//     },
+//     setObject: function(key, value) {
+//       $window.localStorage[key] = JSON.stringify(value);
+//     },
+//     getObject: function(key) {
+//       return JSON.parse($window.localStorage[key] || '{}');
+//     }
+//   }
+// }])
+
 .factory('Users', ['$http','PARSE_CREDENTIALS', function($http, PARSE_CREDENTIALS) {
   return {
-    // getAll: function() {
-    //   return $http.get('https://api.parse.com/1/classes/User', {
-    //     headers: {
-    //       'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-    //       'X-Parse-REST-API-Key': PARSE_CREDENTIALS.REST_API_KEY,
-    //     }
-    //   });
-    // },
+    getUser: function(objectId) {
+      return $http.get('https://api.parse.com/1/users/' + objectId, {
+        headers: {
+          'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
+          'X-Parse-REST-API-Key': PARSE_CREDENTIALS.REST_API_KEY,
+        }
+      });
+    },
     login: function(username, password) {
       return $http.get('https://api.parse.com/1/login?username=' + username + '&password=' + password, {
         headers: {

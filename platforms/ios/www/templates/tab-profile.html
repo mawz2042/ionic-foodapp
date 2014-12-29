@@ -1,0 +1,11 @@
+<ion-view>
+    <ion-content>
+        <div class="list">
+            <a ng-repeat="favouritePlace in favouritePlaces" class="item item-thumbnail-left" ng-click="goToFavourite(favouritePlace.foursquarePlaceId)">
+                <img src="{{ favouritePlace.restaurantThumbnail }}">
+                <h2>{{ favouritePlace.restaurantName }}</h2>
+                <!-- <p>{{ favouritePlace.foursquarePlaceId }}</p> -->
+            </a>
+        </div>
+    </ion-content>
+</ion-view>
