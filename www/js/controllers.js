@@ -40,12 +40,13 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('LoginCtrl', function($scope, $rootScope, $state, $http, Alerts, Users) {
+    .controller('LoginCtrl', function($scope, $rootScope, $state, $http, $localstorage, Alerts, Users) {
         $scope.loginObj = {};
         $scope.login = function() {
             Users.login($scope.loginObj.username, $scope.loginObj.password).success(function(data){
                 $rootScope.currentUser = data;
                 console.log($rootScope.currentUser);
+                $localstorage.setObject('currentUser', $rootScope.currentUser);
                 $state.go('tab.dash', {});
             }).error(function() {
                 console.log("error");
@@ -90,7 +91,7 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, $ionicLoading, $ionicViewService, Loading, Alerts, Favourites, Foursquare, Twitter) {
+    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, $ionicLoading, $ionicViewService, $localstorage, Loading, Alerts, Favourites, Foursquare, Twitter) {
         // Save profile stateId history
         $rootScope.lastViewHistory = $rootScope.$viewHistory.currentView.stateId;
         console.log($rootScope.lastViewHistory);
@@ -139,6 +140,12 @@ angular.module('starter.controllers', [])
                 var message = 'Could not retrieve restaurant details';
                 Alerts.error(message);
             });
+        };
+
+        $scope.logout = function() {
+            $localstorage.removeObject('currentUser');
+            console.log($localstorage.getObject('currentUser'));
+            $state.go('tab.home', {}); 
         };
     })
 

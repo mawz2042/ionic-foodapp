@@ -478,6 +478,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Eat;
+				PROVISIONING_PROFILE = "2b87ea54-488d-4908-93b8-1434817c7d19";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -508,6 +509,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Eat;
+				PROVISIONING_PROFILE = "cc3c3d57-da51-4d15-963e-9ed9ec87e383";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

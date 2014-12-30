@@ -7,18 +7,27 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic.contrib.ui.cards'])
 
-.run(function($ionicPlatform) {
+.run(function($rootScope, $ionicPlatform, $localstorage, $state) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
+    if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
-    if(window.StatusBar) {
+    if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.overlaysWebView(true);
       StatusBar.styleLightContent();
       // StatusBar.styleDefault();
+    }
+    // Checks if user is already logged in
+    var currentUser = $localstorage.getObject('currentUser');
+    if (currentUser['sessionToken'] == undefined) {
+      console.log('Please Login');
+    } else {
+      console.log('Restore current user');
+      $rootScope.currentUser = currentUser;
+      $state.go('tab.dash', {});
     }
   });
 })
