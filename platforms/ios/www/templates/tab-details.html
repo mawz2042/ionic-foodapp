@@ -1,23 +1,26 @@
 <ion-view>
     <ion-nav-buttons side="right">
-      <button class="button" style="border:none;" ng-click="addToFavourites()" >
-        <i class="{{ favouriteIcon }}"></i>
-      </button>
+        <button class="button" style="border:none;" ng-click="showLists()" >
+            <i class="icon ion-ios-plus-outline"></i>
+        </button>
+        <button class="button" style="border:none;" ng-click="addToFavourites()" >
+            <i class="{{ favouriteIcon }}"></i>
+        </button>
     </ion-nav-buttons>
 
     <div class="tabs tabs-icon-top">
-          <a class="tab-item active" href="#/tab/dash/list/details" style="color: rgb(204, 35, 17)">
+        <a class="tab-item active" href="#/tab/dash/list/details" style="color: rgb(204, 35, 17)">
             <i class="icon ion-spoon"></i>
-              Info
-          </a>
-          <a class="tab-item" href="#/tab/dash/list/instagram">
+            Info
+        </a>
+        <a class="tab-item" href="#/tab/dash/list/instagram">
             <i class="icon ion-social-instagram"></i>
-              Instagram
-          </a>
-          <a class="tab-item" href="#/tab/dash/list/twitter">
-            <i class="icon ion-social-twitter"></i>
-              Twitter
-          </a>
+            Instagram
+        </a>
+        <a class="tab-item" href="#/tab/dash/list/twitter">
+            <i class="icon ion-ios-lightbulb"></i>
+            Tips &amp; Reviews
+        </a>
     </div>
 
     <ion-content class="has-footer">

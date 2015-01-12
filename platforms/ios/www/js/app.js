@@ -8,6 +8,7 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic.contrib.ui.cards'])
 
 .run(function($rootScope, $ionicPlatform, $localstorage, $state) {
+  
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -21,12 +22,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       // StatusBar.styleDefault();
     }
     // Checks if user is already logged in
-    var currentUser = $localstorage.getObject('currentUser');
-    if (currentUser['sessionToken'] == undefined) {
+    if (!Parse.User.current()) {
       console.log('Please Login');
     } else {
       console.log('Restore current user');
-      $rootScope.currentUser = currentUser;
       $state.go('tab.dash', {});
     }
   });
@@ -91,6 +90,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
 
+    .state('tab.intro', {
+      url: '/intro',
+      views: {
+        'tab-intro': {
+          templateUrl: 'templates/tab-intro.html',
+          controller: 'IntroCtrl'
+        }
+      }
+    })
+
     // Each tab has its own nav history stack:
     .state('tab.dash', {
       url: '/dash',
@@ -107,6 +116,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       views: {
         'tab-dash': {
           templateUrl: 'templates/tab-profile.html',
+          controller: 'ProfileCtrl'
+        }
+      }
+    })
+
+    .state('tab.favourites', {
+      url: '/dash/favourites',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tab-favourites.html',
           controller: 'ProfileCtrl'
         }
       }

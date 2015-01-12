@@ -7,18 +7,26 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic.contrib.ui.cards'])
 
-.run(function($ionicPlatform) {
+.run(function($rootScope, $ionicPlatform, $localstorage, $state) {
+  
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
+    if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
-    if(window.StatusBar) {
+    if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.overlaysWebView(true);
       StatusBar.styleLightContent();
       // StatusBar.styleDefault();
+    }
+    // Checks if user is already logged in
+    if (!Parse.User.current()) {
+      console.log('Please Login');
+    } else {
+      console.log('Restore current user');
+      $state.go('tab.dash', {});
     }
   });
 })
@@ -51,19 +59,48 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       templateUrl: "templates/tabs.html"
     })
 
-    // User login
+    // User login/register
     .state('tab.home', {
       url: '/home',
       views: {
         'tab-home': {
           templateUrl: 'templates/tab-home.html',
-          controller: 'DashCtrl'
+          controller: 'HomeCtrl'
+        }
+      }
+    })
+
+    .state('tab.login', {
+      url: '/home/login',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/tab-login.html',
+          controller: 'LoginCtrl'
+        }
+      }
+    })
+
+    .state('tab.register', {
+      url: '/home/register',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/tab-register.html',
+          controller: 'RegisterCtrl'
+        }
+      }
+    })
+
+    .state('tab.intro', {
+      url: '/intro',
+      views: {
+        'tab-intro': {
+          templateUrl: 'templates/tab-intro.html',
+          controller: 'IntroCtrl'
         }
       }
     })
 
     // Each tab has its own nav history stack:
-
     .state('tab.dash', {
       url: '/dash',
       views: {
@@ -74,26 +111,55 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
 
-    .state('tab.friends', {
-      url: '/dash/friends',
+    .state('tab.profile', {
+      url: '/dash/profile',
       views: {
         'tab-dash': {
-          templateUrl: 'templates/tab-friends.html',
-          controller: 'FriendsCtrl'
+          templateUrl: 'templates/tab-profile.html',
+          controller: 'ProfileCtrl'
         }
       }
     })
-    .state('tab.account', {
-      url: '/dash/friends/account',
+
+    .state('tab.favourites', {
+      url: '/dash/favourites',
       views: {
         'tab-dash': {
-          templateUrl: 'templates/tab-account.html',
-          controller: 'AccountCtrl'
+          templateUrl: 'templates/tab-favourites.html',
+          controller: 'ProfileCtrl'
+        }
+      }
+    })
+
+    .state('tab.list', {
+      url: '/dash/list',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tab-list.html',
+          controller: 'ListCtrl'
+        }
+      }
+    })
+    .state('tab.details', {
+      url: '/dash/list/details',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tab-details.html',
+          controller: 'DetailsCtrl'
+        }
+      }
+    })
+    .state('tab.map', {
+      url: '/dash/list/details/map',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tab-map.html',
+          controller: 'MapCtrl'
         }
       }
     })
     .state('tab.twitter', {
-      url: '/dash/friends/twitter',
+      url: '/dash/list/twitter',
       views: {
         'tab-dash': {
           templateUrl: 'templates/tab-twitter.html',
@@ -102,7 +168,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     })
     .state('tab.instagram', {
-      url: '/dash/friends/instagram',
+      url: '/dash/list/instagram',
       views: {
         'tab-dash': {
           templateUrl: 'templates/tab-instagram.html',

@@ -1,7 +1,10 @@
 <ion-view>
     <ion-nav-buttons side="right">
-      <button class="button" style="border:none;" ng-controller="ProfileCtrl" ng-click="profile()" >
+      <button class="button" style="border:none;" ng-controller="ProfileCtrl" ng-click="favourites()" >
         <i class="icon ion-ios-star"></i>
+      </button>
+      <button class="button" style="border:none;" ng-controller="ProfileCtrl" ng-click="profile()" >
+        <i class="icon ion-ios-person"></i>
       </button>
       <button class="button" style="border:none;" ng-controller="ProfileCtrl" ng-click="logout()" >
         <i class="icon ion-log-out"></i>
@@ -30,17 +33,6 @@
               <div class="range range-assertive">
                 <input type="range" min="{{distanceList.min}}" max="{{distanceList.max}}" value="{{distanceList.value}}" step="0.5" ng-model="distanceList.value" ng-change="updateDistance(distanceList.value)">
               </div>
-                <!-- <p>Distance (km)</p>
-                <div class="button-bar">
-                    <ion-radio ng-repeat="item in distanceList"
-                               ng-value="item.value"
-                               ng-model="data.distance"
-                               ng-change="updateDistance(item)"
-                               class="button button-assertive button-outline"
-                               name="radio1">
-                      {{ item.text }}
-                    </ion-radio>
-                </div> -->
             </div>
 
             <div class="list list-inset">

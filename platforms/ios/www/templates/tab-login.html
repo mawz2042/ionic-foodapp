@@ -1,6 +1,6 @@
 <ion-view>
   <ion-content>
-    <form ng-submit="login()">
+    <form ng-submit="standardLogin()">
       <div class="list">
         <label class="item item-input">
           <span class="input-label">Username</span>
@@ -15,5 +15,9 @@
         <button class="button button-block button-assertive activated" type="submit">Sign In</button>
       </div>
     </form>
+    <!-- Facebook login -->
+    <div class="padding">
+      <button class="button button-block button-positive activated" ng-click="login()">Login with Facebook</button>
+    </div>
   </ion-content>
 </ion-view>

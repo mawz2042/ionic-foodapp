@@ -20,36 +20,6 @@ angular.module('starter.services', [])
   }
 }])
 
-.factory('Users', ['$http','PARSE_CREDENTIALS', function($http, PARSE_CREDENTIALS) {
-  return {
-    getUser: function(objectId) {
-      return $http.get('https://api.parse.com/1/users/' + objectId, {
-        headers: {
-          'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-          'X-Parse-REST-API-Key': PARSE_CREDENTIALS.REST_API_KEY,
-        }
-      });
-    },
-    login: function(username, password) {
-      return $http.get('https://api.parse.com/1/login?username=' + username + '&password=' + password, {
-        headers: {
-          'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-          'X-Parse-REST-API-Key': PARSE_CREDENTIALS.REST_API_KEY,
-        }
-      });
-    },
-    register: function(data) {
-      return $http.post('https://api.parse.com/1/users', data, {
-        headers: {
-          'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-          'X-Parse-REST-API-Key': PARSE_CREDENTIALS.REST_API_KEY,
-          'Content-Type':'application/json'
-        }
-      });
-    }
-  }
-}])
-
 .factory('Favourites', ['$http','PARSE_CREDENTIALS', function($http, PARSE_CREDENTIALS) {
   return {
     getAll: function(data) {
