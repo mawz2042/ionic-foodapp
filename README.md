@@ -1,10 +1,12 @@
 Ionic Foodapp
 =============
 
-## v.0.0.1
-* added swipable list
-* using Foursquare api for places and photos
-* base application is almost complete
+## v.0.0.2 
+* Plugins used:
+* cordova facebook connect plugin
+* ion-google-place - https://github.com/israelidanny/ion-google-place
+* ionic swipecards - horizontal hacky
+* parse
 
 #### Issues
-* when selecting cuisine type, if there is one result, it will not display
+

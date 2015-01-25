@@ -482,6 +482,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -508,7 +509,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Eat;
-				PROVISIONING_PROFILE = "ec44c207-e94c-49f8-bf9b-d5c99d09e68f";
+				PROVISIONING_PROFILE = "5c46deef-c0a1-4fa5-b55b-1fcd649a56c4";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -519,6 +520,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -543,7 +545,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = Eat;
-				PROVISIONING_PROFILE = "e5235507-9b2b-4f3f-abaa-7923d6deb90a";
+				PROVISIONING_PROFILE = "a2c8de57-746f-4e09-8357-ace3792be061";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

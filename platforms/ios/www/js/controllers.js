@@ -162,7 +162,7 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, $ionicLoading, $ionicViewService, $localstorage, Loading, Alerts, Favourites, Foursquare, Twitter) {
+    .controller('ProfileCtrl', function($scope, $rootScope, $state, $http, $ionicLoading, $ionicViewService, $ionicPopup, $localstorage, Loading, Alerts, Favourites, Foursquare, Twitter) {
         // Save profile stateId history
         $rootScope.lastViewHistory = $rootScope.$viewHistory.currentView.stateId;
         console.log($rootScope.lastViewHistory);
@@ -286,11 +286,29 @@ angular.module('starter.controllers', [])
             }
         };
         $scope.logout = function() {
-            Parse.User.logOut();
-            $localstorage.removeObject('profileInfo');
-            var currentUser = Parse.User.current();  // this will now be null
-            console.log(currentUser);
-            $state.go('tab.home', {}); 
+            $ionicPopup.show({
+                template: 'Are you sure you want to logout?',
+                title: 'Logout',
+                scope: $scope,
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    type: 'button-default'
+                  },
+                  {
+                    text: 'Submit',
+                    type: 'button-assertive',
+                    onTap: function(e) {
+                        // Returning a value will cause the promise to resolve with the given value.
+                        Parse.User.logOut();
+                        $localstorage.removeObject('profileInfo');
+                        var currentUser = Parse.User.current();  // this will now be null
+                        console.log(currentUser);
+                        $state.go('tab.home', {});
+                    }
+                  },
+                ]
+            }); 
         };
     })
 
