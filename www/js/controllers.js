@@ -149,7 +149,86 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('RegisterCtrl', function($scope, $rootScope, $state, $http, Alerts) {
+    .controller('RegisterCtrl', function($scope, $rootScope, $state, $http, $localstorage, $cordovaFacebook, Alerts) {
+        $scope.fbRegister = function() {
+            console.log('Facebook Register');
+            if (!window.cordova) {
+                var appId = 1594340540779035;
+                facebookConnectPlugin.browserInit(appId);
+            }
+
+            $cordovaFacebook.login(["public_profile", "email", "user_friends"])
+            .then(function(response) {
+                console.log(response);
+                if (!response.authResponse){
+                    console.log("Cannot find the authResponse");
+                    return;
+                }
+                var expDate = new Date(
+                    new Date().getTime() + response.authResponse.expiresIn * 1000
+                ).toISOString();
+
+                var authData = {
+                    id: String(response.authResponse.userID),
+                    access_token: response.authResponse.accessToken,
+                    expiration_date: expDate
+                }
+
+                return Parse.FacebookUtils.logIn(authData, {
+                    success: function(userObject) {
+                        if (!userObject.existed()) {
+                            $cordovaFacebook.api("/me", ["public_profile"])
+                            .then(function(response) {
+                                userObject.set('firstname', response.first_name);
+                                userObject.set('lastname', response.last_name);
+                                userObject.set('email', response.email);
+                                userObject.save();
+                            }, function(error) {
+                                console.log(error);
+                            });
+                            var profilePicParams = {
+                                "type": "square",
+                                "height": "300",
+                                "width": "300"
+                            }
+                            $cordovaFacebook.api("/me/picture", profilePicParams)
+                            .then(function(response) {
+                                userObject.set('fbPicture', response.data.url);
+                                userObject.save();
+                            }, function(error) {
+                                console.log(error);
+                            });
+
+                            $state.go('tab.intro', {});
+                            console.log("User signed up through Facebook!");
+                        } else {
+                            $state.go('tab.intro', {});
+                            console.log("User logged in through Facebook!");
+                        }
+
+                        setTimeout( function() { 
+                            console.log(userObject.attributes); 
+                            // Save to cache after successful login.
+                            var profileInfo = {   
+                                email: userObject.attributes.email, 
+                                fbPicture: userObject.attributes.fbPicture,
+                                firstname: userObject.attributes.firstname,
+                                lastname: userObject.attributes.lastname,
+                                username: userObject.attributes.username 
+                            };
+                            $localstorage.setObject('profileInfo', profileInfo);
+                        }, 2000);
+                    },
+                    error: function(userObject, error) {
+                        console.log("User cancelled the Facebook login or did not fully authorize.");
+                    }
+                });
+            }, function (error) {
+                // error
+                console.log(error);
+            });
+        };
+
         $scope.registerObj = {};
         $scope.register = function() {
             // Register user 
@@ -195,51 +274,6 @@ angular.module('starter.controllers', [])
         // Save profile stateId history
         $rootScope.lastViewHistory = $rootScope.$viewHistory.currentView.stateId;
         console.log($rootScope.lastViewHistory);
-
-        // $scope.createNewList = function() {
-        //     if ($scope.favouriteIcon == "icon ion-ios-star-outline") {
-        //         // Add favourite restaurant to db
-        //         var favouritePlace = {
-        //             foursquarePlaceId: $rootScope.searchCriteria['id'],
-        //             restaurantName: $rootScope.searchCriteria['restaurantName'],
-        //             username: Parse.User.current().getUsername(),
-        //             restaurantThumbnail: $rootScope.business.photos.groups[0].items[0].prefix + "100x100" + $rootScope.business.photos.groups[0].items[0].suffix
-        //         };
-        //         Favourites.add(favouritePlace).success(function(data){
-        //             console.log(data);
-                    
-        //             $scope.objectId = data['objectId'];
-        //             console.log($scope.objectId);
-
-        //             // Link favourite restaurant to user
-        //             var linkFavouritePlace = {
-        //                 favourites: {
-        //                     __op: "AddRelation",
-        //                     objects: [{
-        //                         __type: "Pointer",
-        //                         className: "Favourites",
-        //                         objectId: data['objectId']
-        //                     }]
-        //                 }
-        //             };
-        //             Favourites.link(Parse.User.current().getSessionToken(), Parse.User.current().id, linkFavouritePlace).success(function(data){
-        //                 console.log(data);
-        //                 $scope.favouriteIcon = "icon ion-ios-star";
-        //             }).error(function() {
-        //                 console.log("Could not link favourite entry to user");
-        //             });
-        //         }).error(function() {
-        //             console.log("Could not add favourite entry to database");
-        //         });   
-        //     } else {
-        //         Favourites.delete($scope.objectId).success(function(data){
-        //             console.log(data);
-        //             $scope.favouriteIcon = "icon ion-ios-star-outline";
-        //         }).error(function() {
-        //             console.log("Could not remove favourite restaurant");
-        //         });
-        //     }
-        // };
 
         // Right now using a hybrid of REST and JS SDK - change just to JS SDK
         var currentUser = Parse.User.current();
@@ -293,21 +327,6 @@ angular.module('starter.controllers', [])
             $rootScope.profileInfo = $localstorage.getObject('profileInfo');
             console.log('From cache: ' + $rootScope.profileInfo);
             $state.go('tab.profile', {});
-
-            // facebookConnectPlugin.api('/me/picture', null, function(response) {
-            //     $rootScope.profileInfo = {    
-            //         username: Parse.User.current().getUsername(),
-            //         firstname: Parse.User.current().get("firstname"),
-            //         lastname: Parse.User.current().get("lastname"),
-            //         email: Parse.User.current().get("email"),
-            //         picture: response.data.url
-            //     };
-            //     // Store info in cache
-            //     $localstorage.setObject('profileInfo', $rootScope.profileInfo);
-            //     $state.go('tab.profile', {});
-            // }, function(error) {
-            //     console.log(error);
-            // });
         };
         $scope.logout = function() {
             $ionicPopup.show({
@@ -426,7 +445,7 @@ angular.module('starter.controllers', [])
                 type: ''
             };
             // Select cuisine popup
-            var myPopup = $ionicPopup.show({
+            $ionicPopup.show({
                 templateUrl: 'templates/popup-cuisines.html',
                 title: 'Select Cuisines',
                 scope: $scope,
@@ -449,8 +468,6 @@ angular.module('starter.controllers', [])
             });
         };
 
-        var Restaurants = Parse.Object.extend("Restaurants");
-
         // Call for getting list of restaurants
         $scope.doSubmit = function() {
             console.log($rootScope.searchCriteria);
@@ -463,52 +480,47 @@ angular.module('starter.controllers', [])
                 $rootScope.restaurantCards = [];
                 var saveObject = [];
                 angular.forEach(data.response.groups[0].items, function(value, key) {
+                    var imageUrl;
+                    if(value.venue.photos.groups[0]) {
+                        imageUrl = value.venue.photos.groups[0].items[0].prefix + '500x500' + value.venue.photos.groups[0].items[0].suffix;
+                    }
                     $rootScope.restaurantCards.push({ 
-                        image: value.venue.photos.groups[0].items[0].prefix + '500x500' + value.venue.photos.groups[0].items[0].suffix, 
+                        image: imageUrl, 
                         name: value.venue.name,
                         category: value.venue.categories[0].name,
                         rating: value.venue.rating,
                         id: value.venue.id
                     });
 
-                    var restaurants = new Restaurants();
                     var point = new Parse.GeoPoint({latitude: value.venue.location.lat, longitude: value.venue.location.lng});
 
-                    restaurants.set("location", point);
-                    restaurants.set("foursquareId", value.venue.id);
-                    restaurants.set("restaurantName", value.venue.name);
-                    restaurants.set("phone", value.venue.contact.phone);
-                    restaurants.set("twitterId", value.venue.contact.twitter);
-                    restaurants.set("facebookId", value.venue.contact.facebook);
-                    restaurants.set("postalCode", value.venue.location.postalCode);
-                    restaurants.set("address", value.venue.location.address);
-                    restaurants.set("city", value.venue.location.city);
-                    restaurants.set("state", value.venue.location.state);
-                    restaurants.set("country", value.venue.location.country);
-                    restaurants.set("cc", value.venue.location.cc);
-                    restaurants.set("rating", value.venue.rating);
-                    restaurants.set("priceTier", value.venue.price.tier);
-                    restaurants.set("website", value.venue.url);
-
-                    // restaurants.set("reservationUrl", value.venue.reservations.url);
-                    // restaurants.set("menuUrl", value.venue.menu.mobileUrl);
-                    
-                    saveObject.push(restaurants);
-                });
-
-                console.log(saveObject);
-
-                Parse.Object.saveAll(saveObject, {
-                    success: function(objects) {
-                        // objects have been saved...
-                        console.log("objects have been saved");
-                        console.log(objects);
-                    },
-                    error: function(error) { 
-                        // Execute any logic that should take place if the save fails.
-                        // error is a Parse.Error with an error code and message.
-                        console.log('Failed to create objects, with error code: ' + error.message);
-                    }
+                    Parse.Cloud.run('saveRestaurants', { 
+                        location: point, 
+                        foursquareId: value.venue.id, 
+                        restaurantName: value.venue.name,
+                        phone: value.venue.contact.phone,
+                        twitterId: value.venue.contact.twitter,
+                        facebookId: value.venue.contact.facebook,
+                        postalCode: value.venue.location.postalCode,
+                        address: value.venue.location.address,
+                        city: value.venue.location.city,
+                        state: value.venue.location.state,
+                        country: value.venue.location.country,
+                        cc: value.venue.location.cc,
+                        rating: value.venue.rating,
+                        priceTier: value.venue.price.tier,
+                        website: value.venue.url,
+                        reservationUrl: ((value.venue.reservations) ? value.venue.reservations.url : ""),
+                        menuUrl: ((value.venue.menu) ? value.venue.menu.mobileUrl : ""),
+                        featuredImage: imageUrl
+                    }, {
+                        success: function(response) {
+                            console.log(response);
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
                 });
 
                 if($rootScope.restaurantCards != "") {
@@ -518,7 +530,7 @@ angular.module('starter.controllers', [])
 
                     // $rootScope.cards = Array.prototype.slice.call($rootScope.cardTypes, 0, 0);
 
-                    $rootScope.ranDemandTitle();
+                    // $rootScope.ranDemandTitle();
                     $ionicLoading.hide();
                     // Reset the saved index for new search
                     $rootScope.lastSavedIndex = null;
@@ -537,12 +549,6 @@ angular.module('starter.controllers', [])
         };
 
         $scope.selectCuisine = function() {
-            $state.go('tab.list', {});
-        };
-
-        $scope.searchHomeKitchens = function() {
-            
-            
             $state.go('tab.list', {});
         };
     })
@@ -584,7 +590,7 @@ angular.module('starter.controllers', [])
             $scope.cards.splice(index, 1);
 
             // Generate go to title
-            $rootScope.ranDemandTitle();
+            // $rootScope.ranDemandTitle();
 
             // Assign restaurant id and name to search query
             $rootScope.searchCriteria['id'] = $rootScope.restaurantCards[restaurantCardsIndexPosition].id;
@@ -647,18 +653,37 @@ angular.module('starter.controllers', [])
             // Should make into seperate function to call
             Foursquare.details($rootScope.searchCriteria).success(function(data){
                 $ionicLoading.hide();
-                $rootScope.business = data.response.venue;
-                console.log($rootScope.business);
 
-                var Restaurant = Parse.Object.extend("Restaurants");
-                var query = new Parse.Query(Restaurant);
-                query.equalTo("foursquareId", $rootScope.searchCriteria.id);
-                query.find({
-                    success: function(result) {
-                        console.log(result);
+                var attributes = data.response.venue.attributes.groups;
+                $rootScope.business = data.response.venue;
+
+                var saveDetails = {  
+                    foursquareId: $rootScope.business.id,
+                    category: $rootScope.business.categories[0].shortName,
+                    description: (($rootScope.business.description) ? $rootScope.business.description : "")
+                };
+
+                angular.forEach(attributes, function(value, key) {
+                    if (value.name == 'Menus') {
+                        saveDetails['menus'] = value.summary
+                    } 
+                    if (value.name == 'Credit Cards') {
+                        saveDetails['creditCards'] = value.items[0].displayValue
+                    }
+                    else {
+                        saveDetails[value.type] = value.items[0].displayValue
+                    }
+                });
+
+                console.log($rootScope.business);
+                console.log(saveDetails);
+
+                Parse.Cloud.run('saveRestaurants', saveDetails, {
+                    success: function(response) {
+                        console.log(response);
                     },
                     error: function(error) {
-                        alert("Error: " + error.code + " " + error.message);
+                        console.log(error);
                     }
                 });
 
@@ -711,34 +736,6 @@ angular.module('starter.controllers', [])
         }).error(function() {
             console.log("could not get favourite place");
         });
-
-        // $scope.showLists = function() {
-        //     // lists popup
-        //     $ionicPopup.show({
-        //         templateUrl: 'templates/popup-lists.html',
-        //         title: 'Select lists to add to',
-        //         scope: $scope,
-        //         buttons: [
-        //           {
-        //             text: 'Cancel',
-        //             type: 'button-default'
-        //           },
-        //           {
-        //             text: 'Submit',
-        //             type: 'button-assertive',
-        //             onTap: function(e) {
-        //                 // Returning a value will cause the promise to resolve with the given value.
-        //                 // $rootScope.searchCriteria['cuisineId'] =  $scope.cuisineId.type;;
-        //                 // console.log($rootScope.searchCriteria['cuisineId']);
-        //                 // $scope.doSubmit();
-        //             }
-        //           }
-        //         ]
-        //     });
-        // };
-        // $scope.addToLists = function() {
-
-        // };
 
         $scope.addToFavourites = function() {
             if ($scope.favouriteIcon == "icon ion-ios-star-outline") {

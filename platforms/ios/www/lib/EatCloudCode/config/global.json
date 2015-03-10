@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "eat"
+        }, 
+        "eat": {
+            "applicationId": "g3pJuFTV11d3QNG1zSGsn0Ea6b8OiYEve5gCXQWp", 
+            "masterKey": "FYEMmF75ZmYe1i17T5MG3MUin0ED8xueY61QZfyw"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.4"
+    }
+}

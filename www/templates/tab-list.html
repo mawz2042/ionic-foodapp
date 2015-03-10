@@ -5,7 +5,7 @@
 
           <td-card id="td-card" ng-repeat="card in cards" on-transition-left="transitionLeft(card)" on-transition-right="transitionRight(card)" on-transition-out="transitionOut(card)" on-destroy="cardDestroyed($index)" on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)" on-partial-swipe="cardPartialSwipe(amt)">
             <div class="image">
-                <div class="item item-divider" style="font-size:24px; text-align:center;">
+                <div class="item item-divider" style="font-size:18px; text-align:center;">
                     {{demandTitle}} 
                 </div>
                 <div class="no-text">NOPE</div>
@@ -13,7 +13,7 @@
                     <div class="padding-vertical" style="font-size:16px; font-weight:bold;">
                         {{card.name}}
                     </div>
-                    <div class="padding-vertical">
+                    <div>
                         <div style="display:inline-block; width:79%; vertical-align:top;">{{card.category}}</div>
                         <div style="display:inline-block; text-align:right; width:19%;" ng-if="card.rating != null">{{card.rating}}/10</div>
                     </div>

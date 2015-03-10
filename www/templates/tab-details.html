@@ -33,9 +33,10 @@
 
             <div class="item item-text-wrap">
                 <div class="padding-vertical">
-                    <div ng-if="business.price.message != null">
-                        Price: {{business.price.message}}
-                    </div>
+                    <div ng-if="business.price.tier == 1">Price: $10 under</div>
+                    <div ng-if="business.price.tier == 2">Price: $11-$30</div>
+                    <div ng-if="business.price.tier == 3">Price: $31-$50</div>
+                    <div ng-if="business.price.tier == 4">Price: $50+</div>
                     <div ng-if="business.rating != null">
                         Rating: {{business.rating}}/10
                     </div>
@@ -65,11 +66,20 @@
                 <img src="https://api.tiles.mapbox.com/v4/cyberkronos.kjdbl1id/pin-l-restaurant+F52636({{business.location.lng}},{{business.location.lat}})/{{business.location.lng}},{{business.location.lat}},17/400x250.png?access_token=pk.eyJ1IjoiY3liZXJrcm9ub3MiLCJhIjoia3RMOFJ5byJ9.Nvqs957NLHa4w5eV1IcjmQ">
             </div>
 
-             <div class="item item-text-wrap" style="display: table; width: 100%;">
+            <div class="item item-text-wrap" style="display: table; width: 100%;">
                 <div style="font-weight:bold;">Hours</div>
                 <div ng-repeat="hours in business.hours.timeframes">
                     <div style="display: table-cell; min-width: 120px;">{{ hours.days }}</div> 
                     <div style="display: table-cell;">{{ hours.open[0].renderedTime }}</div>
+                </div>
+            </div>
+
+            <div class="item item-text-wrap">
+                <div style="font-weight:bold;">Details</div>
+                <br/>
+                <div ng-repeat="details in business.attributes.groups">
+                    <div ng-if="details.name == 'Menus'">{{ details.name }}: <b>{{ details.summary }}</b></div>
+                    <div ng-if="details.name != 'Menus'">{{ details.name }}: <b>{{ details.items[0].displayValue }}</b></div> 
                 </div>
             </div>
 
