@@ -31,11 +31,11 @@ angular.module('starter.controllers', [])
     })
 
     .controller('HomeCtrl', function($scope, $rootScope, $state) {
-        $scope.loginView = function() {
+        $scope.goToLoginView = function() {
             $state.go('tab.login', {});
         };
 
-        $scope.registerView = function() {
+        $scope.goToRegisterView = function() {
             $state.go('tab.register', {});
         };
     })
@@ -65,7 +65,7 @@ angular.module('starter.controllers', [])
         };
 
         // FB Login/Register
-        $scope.login = function() {
+        $scope.facebookLogin = function() {
             console.log('Login');
             if (!window.cordova) {
                 var appId = 1594340540779035;
@@ -146,7 +146,30 @@ angular.module('starter.controllers', [])
     })
 
     .controller('RegisterCtrl', function($scope, $rootScope, $state, $http, $localstorage, $cordovaFacebook, Alerts) {
-        $scope.fbRegister = function() {
+        $scope.registerObj = {};
+        $scope.standardRegister = function() {
+            // Register user 
+            var user = new Parse.User();
+            user.set("username", $scope.registerObj.username);
+            user.set("firstname", $scope.registerObj.firstname);
+            user.set("lastname", $scope.registerObj.lastname);
+            user.set("password", $scope.registerObj.password);
+            user.set("email", $scope.registerObj.email); 
+            user.signUp(null, {
+                success: function(user) {
+                    // Hooray! Let them use the app now.
+                    console.log(user);
+                    $state.go('tab.intro', {});
+                },
+                error: function(user, error) {
+                    // Show the error message somewhere and let the user try again.
+                    var message = "Error: " + error.code + " " + error.message;
+                    Alerts.error(message);
+                }
+            });
+        };
+
+        $scope.facebookRegister = function() {
             console.log('Facebook Register');
             if (!window.cordova) {
                 var appId = 1594340540779035;
@@ -224,42 +247,13 @@ angular.module('starter.controllers', [])
                 console.log(error);
             });
         };
-
-        $scope.registerObj = {};
-        $scope.register = function() {
-            // Register user 
-            var user = new Parse.User();
-            user.set("username", $scope.registerObj.username);
-            user.set("firstname", $scope.registerObj.firstname);
-            user.set("lastname", $scope.registerObj.lastname);
-            user.set("password", $scope.registerObj.password);
-            user.set("email", $scope.registerObj.email); 
-            user.signUp(null, {
-                success: function(user) {
-                    // Hooray! Let them use the app now.
-                    console.log(user);
-                    $state.go('tab.intro', {});
-                },
-                error: function(user, error) {
-                    // Show the error message somewhere and let the user try again.
-                    var message = "Error: " + error.code + " " + error.message;
-                    Alerts.error(message);
-                }
-            });
-        };
     })
 
-    .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate) {
+    .controller('IntroCtrl', function($scope, $state) {
         // Called to navigate to the main app
-        $scope.startApp = function() {
+        $scope.goToDashView = function() {
             $state.go('tab.dash', {});
         };
-        // $scope.next = function() {
-        //     $ionicSlideBoxDelegate.next();
-        // };
-        // $scope.previous = function() {
-        //     $ionicSlideBoxDelegate.previous();
-        // };
         // Called each time the slide changes
         $scope.slideChanged = function(index) {
             $scope.slideIndex = index;
@@ -271,7 +265,8 @@ angular.module('starter.controllers', [])
         $rootScope.lastViewHistory = $rootScope.$viewHistory.currentView.stateId;
         console.log($rootScope.lastViewHistory);
 
-        // Right now using a hybrid of REST and JS SDK - change just to JS SDK
+        // TODO: Right now using a hybrid of REST and JS SDK, 
+        //       change just to JS SDK
         var currentUser = Parse.User.current();
         $rootScope.getFavouritesList = { 
             $relatedTo: {
@@ -298,6 +293,7 @@ angular.module('starter.controllers', [])
             var favouriteId = {
                 id: $rootScope.searchCriteria['id']
             };
+            // TODO: Rewrite using JS promise functions
             Foursquare.details(favouriteId).success(function(data){
                 $ionicLoading.hide();
                 $rootScope.business = data.response.venue;
@@ -352,27 +348,6 @@ angular.module('starter.controllers', [])
     })
 
     .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, Alerts, $ionicPlatform, $ionicLoading, Loading, TDCardDelegate, Favourites, Foursquare, $cordovaGeolocation) {
-        // Preload the foursquare cuisine types
-        Foursquare.cuisines().success(function(data) {
-            $rootScope.cuisines = data.response.categories[3].categories;
-        }).error(function(err) {
-            console.log("failed");
-        });
-
-        // Load search root scope
-        $rootScope.searchCriteria = {
-            counter: '',
-            name: '',
-            restaurantName: '',
-            id: '',
-            twitter: '',
-            price: '',
-            distance: '',
-            cuisineId: '',
-            latitude: '',
-            longitude: ''
-        }
-
         // List of demand headings
         $rootScope.demandTitles = [
             "Go To",
@@ -388,22 +363,6 @@ angular.module('starter.controllers', [])
             $scope.randomNum = Math.floor((Math.random() * $rootScope.demandTitles.length));
             $rootScope.demandTitle = $rootScope.demandTitles[$scope.randomNum];
         };
-
-        // Geolocation to get location position
-        var posOptions = { timeout: 10000, enableHighAccuracy: false };
-        $cordovaGeolocation
-        .getCurrentPosition(posOptions)
-        .then(function (position) {
-            var lat  = position.coords.latitude
-            var long = position.coords.longitude
-            $rootScope.searchCriteria['latitude'] = lat;
-            $rootScope.searchCriteria['longitude'] = long;
-        }, function(err) {
-            // error
-            console.log("Error retrieving position " + err.code + " " + err.message)
-        });
-
-        console.log($rootScope.searchCriteria);
 
         $scope.distanceList = {
             min:'0',
@@ -436,7 +395,7 @@ angular.module('starter.controllers', [])
             console.log( 'Price: ' + $rootScope.searchCriteria['price'] );
         };
 
-        $scope.showPopup = function() {
+        $scope.selectCuisinesPopup = function() {
             $scope.cuisineId = {
                 type: ''
             };
@@ -457,7 +416,7 @@ angular.module('starter.controllers', [])
                         // Returning a value will cause the promise to resolve with the given value.
                         $rootScope.searchCriteria['cuisineId'] =  $scope.cuisineId.type;;
                         console.log($rootScope.searchCriteria['cuisineId']);
-                        $scope.doSubmit();
+                        $scope.searchRestaurants();
                     }
                   },
                 ]
@@ -465,8 +424,8 @@ angular.module('starter.controllers', [])
         };
 
         // TODO: REFACTOR THE FKING LONG FUNCTION
-        // Call for getting list of restaurants
-        $scope.doSubmit = function() {
+        //       Call for getting list of restaurants
+        $scope.searchRestaurants = function() {
             console.log($rootScope.searchCriteria);
             Loading.show('Finding the Best Locations');
             var restaurantList;
@@ -493,6 +452,7 @@ angular.module('starter.controllers', [])
 
                     var point = new Parse.GeoPoint({latitude: value.venue.location.lat, longitude: value.venue.location.lng});
 
+                    // TODO: Need to move this to parse cloud code for scraping
                     Parse.Cloud.run('saveRestaurants', { 
                         location: point, 
                         foursquareId: value.venue.id, 
@@ -603,10 +563,6 @@ angular.module('starter.controllers', [])
                 Alerts.error(message);
             });
         };
-
-        $scope.selectCuisine = function() {
-            $state.go('tab.list', {});
-        };
     })
 
     .controller('ListCtrl', function($scope, $http, $rootScope, $state, $ionicViewService, $ionicLoading, $ionicPopup, Loading, TDCardDelegate, Favourites, Foursquare, Twitter) {
@@ -707,9 +663,10 @@ angular.module('starter.controllers', [])
         //     console.log(card);
         // };
 
-        $scope.restaurantSubmit = function() {
+        $scope.getRestaurantDetails = function() {
             Loading.show('Getting Restaurant Details');
-            // Should make into seperate function to call
+
+            // TODO: Rewrite using JS promise functions
             Foursquare.details($rootScope.searchCriteria).success(function(data){
                 $ionicLoading.hide();
 
@@ -740,6 +697,7 @@ angular.module('starter.controllers', [])
                 console.log(venueDetails);
                 console.log(saveDetails);
 
+                // TODO: Need to create a loop that saves the details of a list of restuarants to parse
                 Parse.Cloud.run('saveRestaurants', saveDetails, {
                     success: function(response) {
                         console.log(response);
@@ -808,13 +766,15 @@ angular.module('starter.controllers', [])
                     username: Parse.User.current().getUsername(),
                     restaurantThumbnail: $rootScope.business.photos.groups[0].items[0].prefix + "100x100" + $rootScope.business.photos.groups[0].items[0].suffix
                 };
+                // TODO: Rewrite using JS promise functions
                 Favourites.add(favouritePlace).success(function(data){
                     console.log(data);
                     
                     $scope.objectId = data['objectId'];
                     console.log($scope.objectId);
 
-                    // Link favourite restaurant to user
+                    // TODO: Linking favourite restaurant to user,
+                    //       rewrite in JS lib (its in REST right now)
                     var linkFavouritePlace = {
                         favourites: {
                             __op: "AddRelation",

@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'ionic.contrib.ui.tinderCards', 'ion-google-place'])
 
-.run(function($rootScope, $ionicPlatform, $localstorage, $state) {
+.run(function($rootScope, $ionicPlatform, $localstorage, $state, $cordovaGeolocation, Foursquare) {
   
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -28,6 +28,40 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       console.log('Restore current user');
       $state.go('tab.dash', {});
     }
+    // Load the foursquare cuisine list
+    Foursquare.cuisines().success(function(data) {
+        $rootScope.cuisines = data.response.categories[3].categories;
+    }).error(function(err) {
+        console.log("failed");
+    });
+    // Load search rootscope
+    $rootScope.searchCriteria = {
+        counter: '',
+        name: '',
+        restaurantName: '',
+        id: '',
+        twitter: '',
+        price: '',
+        distance: '',
+        cuisineId: '',
+        latitude: '',
+        longitude: ''
+    }
+    // Geolocation to get location position
+    var posOptions = { timeout: 10000, enableHighAccuracy: false };
+    $cordovaGeolocation
+    .getCurrentPosition(posOptions)
+    .then(function (position) {
+        var lat  = position.coords.latitude
+        var long = position.coords.longitude
+        $rootScope.searchCriteria['latitude'] = lat;
+        $rootScope.searchCriteria['longitude'] = long;
+    }, function(err) {
+        // error
+        console.log("Error retrieving position " + err.code + " " + err.message)
+    });
+
+    console.log($rootScope.searchCriteria);
   });
 })
 
