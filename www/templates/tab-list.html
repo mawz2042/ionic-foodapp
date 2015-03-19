@@ -1,6 +1,7 @@
 <ion-view>
   	<ion-content>
         <!-- <swipe-cards> -->
+        <div ng-if="showCards"></div>
         <td-cards>
 
           <td-card id="td-card" ng-repeat="card in cards" on-transition-left="transitionLeft(card)" on-transition-right="transitionRight(card)" on-transition-out="transitionOut(card)" on-destroy="cardDestroyed($index)" on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)" on-partial-swipe="cardPartialSwipe(amt)">
@@ -20,8 +21,8 @@
                 </div>
                 <!-- Image Condition -->
                 <div>
-                    <div class="item item-image" ng-if="card.photos.count == 0">
-                        <img src="img/img_placeholder.png">
+                    <div class="item item-image" >
+                        <img src="img/img_placeholder.png" ng-if="card.photos.count == 0" style="height:100%; width:500px;">
                     </div>
                     <div class="item item-image" ng-if="card.photos.count != 0">
                         <img ng-src="{{card.image}}">
@@ -35,41 +36,11 @@
                 </div>
                 <div class="yes-text">LIKE</div>
             </div>
-           <!--  <div class="list card">
-                <div class="item item-divider" style="font-size:24px; text-align:center;">
-                    {{demandTitle}} 
-                </div>
-
-                <div class="item item-text-wrap">
-                    <div class="padding-vertical" style="font-size:16px; font-weight:bold;">
-                        {{card.name}}
-                    </div>
-                    <div class="padding-vertical">
-                        <div style="display:inline-block; width:79%; vertical-align:top;">{{card.categories[0].name}}</div>
-                        <div style="display:inline-block; text-align:right; width:19%;" ng-if="card.rating != null">{{card.rating}}/10</div>
-                    </div>
-                </div>
-                
-                <!-- Image Condition -->
-                <!-- <div>
-                    <div class="item item-image" ng-if="card.photos.count == 0">
-                        <img src="img/img_placeholder.png">
-                    </div>
-                    <div class="item item-image" ng-if="card.photos.count != 0">
-                        <img ng-src="{{card.image}}">
-                    </div>
-
-                    <div style="position:absolute;bottom: 0;z-index: 1000;width: 100%;background-color: rgba(0, 0, 0, 0.7); text-align:center; vertical-align:middle;">
-                        <div style="margin: 5px; display: inline-block;" ng-click="restaurantSubmit()">
-                            <i class="icon ion-information-circled" style="font-size: 30px; color: #ffffff;"></i>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- </div> -->
           </td-card>
           <!-- </swipe-card> -->
 
         </td-cards>
+        </div>
         <!-- </swipe-cards> -->
     <ion-content>
 </ion-view> 

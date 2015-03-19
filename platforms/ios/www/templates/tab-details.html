@@ -78,7 +78,8 @@
                 <div style="font-weight:bold;">Details</div>
                 <br/>
                 <div ng-repeat="details in business.attributes.groups">
-                    <div>{{ details.items[0].displayName }}: <b>{{ details.items[0].displayValue }}</b></div> 
+                    <div ng-if="details.name == 'Menus'">{{ details.name }}: <b>{{ details.summary }}</b></div>
+                    <div ng-if="details.name != 'Menus'">{{ details.name }}: <b>{{ details.items[0].displayValue }}</b></div> 
                 </div>
             </div>
 

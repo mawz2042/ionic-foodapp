@@ -1,9 +1,5 @@
 angular.module('starter.controllers', [])
 
-    // Root scopes:
-    // viewHistory
-    // lastViewHistory
-
     .controller('NavCtrl', function($scope, $rootScope, $state, $ionicViewService) {
         // Nav back history fix
         $scope.goBack = function() {
@@ -511,7 +507,8 @@ angular.module('starter.controllers', [])
                         priceTier: value.venue.price.tier,
                         website: value.venue.url,
                         reservationUrl: ((value.venue.reservations) ? value.venue.reservations.url : ""),
-                        menuUrl: ((value.venue.menu) ? value.venue.menu.mobileUrl : "")  
+                        menuUrl: ((value.venue.menu) ? value.venue.menu.mobileUrl : ""),
+                        featuredImage: imageUrl
                     }, {
                         success: function(response) {
                             console.log(response);
@@ -529,11 +526,99 @@ angular.module('starter.controllers', [])
 
                     // $rootScope.cards = Array.prototype.slice.call($rootScope.cardTypes, 0, 0);
 
-                    $rootScope.ranDemandTitle();
-                    $ionicLoading.hide();
+                    // $rootScope.ranDemandTitle();
+                    // $ionicLoading.hide();
                     // Reset the saved index for new search
                     $rootScope.lastSavedIndex = null;
-                    $state.go('tab.list', {});
+
+                    // Test
+                    $scope.showCards = false;
+                    var restaurantCardsIndexPosition = 0;
+
+                    // Save list stateId history
+                    $rootScope.lastViewHistory = $rootScope.$viewHistory.currentView.stateId;
+                    console.log($rootScope.lastViewHistory);
+
+                    $scope.cards = [];
+                    // $scope.cards = $rootScope.restaurantCards;
+             
+                    $scope.addCard = function(restaurant) {
+                        var newCard = { 
+                            image: restaurant.image, 
+                            name: restaurant.name,
+                            category: restaurant.category,
+                            rating: restaurant.rating,
+                            id: restaurant.id
+                        };
+                        $scope.cards.unshift(angular.extend({}, newCard));
+                    };
+
+                    // Check if user was in the middle of card list, else push cards for new search
+                    if ($rootScope.lastSavedIndex != null) {
+                        restaurantCardsIndexPosition = $rootScope.lastSavedIndex;
+                        $scope.addCard($rootScope.restaurantCards[restaurantCardsIndexPosition]);
+                        $scope.addCard($rootScope.restaurantCards[restaurantCardsIndexPosition-1]);
+                    } else {
+                        if ($rootScope.restaurantCards[1]) {
+                            $scope.addCard($rootScope.restaurantCards[1]);
+                            restaurantCardsIndexPosition = 1;
+                        }
+                        $scope.addCard($rootScope.restaurantCards[0]);       
+                    }
+                    $scope.showCards = true;
+
+                    // Should make into seperate function to call
+                    Foursquare.details($rootScope.searchCriteria).success(function(data){
+                        // $ionicLoading.hide();
+
+                        var attributes = data.response.venue.attributes.groups;
+                        $rootScope.business = data.response.venue;
+
+                        var saveDetails = {  
+                            foursquareId: $rootScope.business.id,
+                            category: $rootScope.business.categories[0].shortName,
+                            description: (($rootScope.business.description) ? $rootScope.business.description : "")
+                        };
+
+                        angular.forEach(attributes, function(value, key) {
+                            if (value.name == 'Menus') {
+                                saveDetails['menus'] = value.summary
+                            } 
+                            if (value.name == 'Credit Cards') {
+                                saveDetails['creditCards'] = value.items[0].displayValue
+                            }
+                            else {
+                                saveDetails[value.type] = value.items[0].displayValue
+                            }
+                        });
+
+                        console.log($rootScope.business);
+                        console.log(saveDetails);
+
+                        Parse.Cloud.run('saveRestaurants', saveDetails, {
+                            success: function(response) {
+                                console.log(response);
+                            },
+                            error: function(error) {
+                                console.log(error);
+                            }
+                        });
+
+                        // All Photos
+                        Foursquare.photos($rootScope.searchCriteria).success(function(data){
+                            $rootScope.photos = data;
+                            console.log($rootScope.photos);
+                        }).error(function(data){
+                            console.log("there is an error");
+                        });
+
+                        $state.go('tab.details', {});
+                    });
+                    // End Test
+                    setTimeout( function() { 
+                        $state.go('tab.list', {});
+                        $ionicLoading.hide();
+                    }, 1500);
                 } else {
                     $ionicLoading.hide();
                     var message = 'No results could be found';
@@ -553,6 +638,7 @@ angular.module('starter.controllers', [])
     })
 
     .controller('ListCtrl', function($scope, $http, $rootScope, $state, $ionicViewService, $ionicLoading, $ionicPopup, Loading, TDCardDelegate, Favourites, Foursquare, Twitter) {
+        $scope.showCards = false;
         var restaurantCardsIndexPosition = 0;
 
         // Save list stateId history
@@ -560,6 +646,7 @@ angular.module('starter.controllers', [])
         console.log($rootScope.lastViewHistory);
 
         $scope.cards = [];
+        // $scope.cards = $rootScope.restaurantCards;
  
         $scope.addCard = function(restaurant) {
             var newCard = { 
@@ -582,14 +669,15 @@ angular.module('starter.controllers', [])
                 $scope.addCard($rootScope.restaurantCards[1]);
                 restaurantCardsIndexPosition = 1;
             }
-            $scope.addCard($rootScope.restaurantCards[0]);
+            $scope.addCard($rootScope.restaurantCards[0]);       
         }
+        $scope.showCards = true;
 
         $scope.cardDestroyed = function(index) {
             $scope.cards.splice(index, 1);
 
             // Generate go to title
-            $rootScope.ranDemandTitle();
+            // $rootScope.ranDemandTitle();
 
             // Assign restaurant id and name to search query
             $rootScope.searchCriteria['id'] = $rootScope.restaurantCards[restaurantCardsIndexPosition].id;
@@ -652,14 +740,32 @@ angular.module('starter.controllers', [])
             // Should make into seperate function to call
             Foursquare.details($rootScope.searchCriteria).success(function(data){
                 $ionicLoading.hide();
-                $rootScope.business = data.response.venue;
-                console.log($rootScope.business);
 
-                Parse.Cloud.run('saveRestaurants', {
+                var attributes = data.response.venue.attributes.groups;
+                $rootScope.business = data.response.venue;
+
+                var saveDetails = {  
                     foursquareId: $rootScope.business.id,
                     category: $rootScope.business.categories[0].shortName,
                     description: (($rootScope.business.description) ? $rootScope.business.description : "")
-                }, {
+                };
+
+                angular.forEach(attributes, function(value, key) {
+                    if (value.name == 'Menus') {
+                        saveDetails['menus'] = value.summary
+                    } 
+                    if (value.name == 'Credit Cards') {
+                        saveDetails['creditCards'] = value.items[0].displayValue
+                    }
+                    else {
+                        saveDetails[value.type] = value.items[0].displayValue
+                    }
+                });
+
+                console.log($rootScope.business);
+                console.log(saveDetails);
+
+                Parse.Cloud.run('saveRestaurants', saveDetails, {
                     success: function(response) {
                         console.log(response);
                     },
