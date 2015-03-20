@@ -69,10 +69,10 @@ angular.module('starter.services', [])
   }
 }])
 
-.factory('Foursquare', ['$http', function($http) {
+.factory('Foursquare', ['$http', 'FOURSQUARE_CREDENTIALS', function($http, FOURSQUARE_CREDENTIALS) {
   return {
     cuisines: function() {
-      return $http.get('https://api.foursquare.com/v2/venues/categories?oauth_token=RGT5ZXHWBGVROTMD1ETZN1GMK0CLTNQEBYMUHEC3OY4XAQDQ&v=20141020');
+      return $http.get('https://api.foursquare.com/v2/venues/categories?oauth_token=' + FOURSQUARE_CREDENTIALS.OAUTH_TOKEN + '&v=20141020');
     },
     list: function(data) {
       return $http.post('http://www.gamehub.ca/foodapp/foursquare.php', data, {
@@ -137,7 +137,26 @@ angular.module('starter.services', [])
   }
 }])
 
+.factory('Bigoven', ['$http','BIGOVEN_CREDENTIALS', function($http, BIGOVEN_CREDENTIALS) {
+  return {
+    getRecipes: function() {
+      return $http.get('http://api.bigoven.com/recipes?any_kw=chicken&pg=1&rpp=50&api_key=' + BIGOVEN_CREDENTIALS.REST_API_KEY + '&sort=quality');
+    },
+    getRecipe: function(data) {
+      return $http.get('http://api.bigoven.com/recipe/' + data + '?api_key=' + BIGOVEN_CREDENTIALS.REST_API_KEY);
+    }
+  }
+}])
+
 .value('PARSE_CREDENTIALS', {
   APP_ID: 'g3pJuFTV11d3QNG1zSGsn0Ea6b8OiYEve5gCXQWp',
   REST_API_KEY: 'HUctvqL7aK11lHmkJJMTlYUO95FiXRUmRGEj31tm'
+})
+
+.value('FOURSQUARE_CREDENTIALS', {
+  OAUTH_TOKEN: 'RGT5ZXHWBGVROTMD1ETZN1GMK0CLTNQEBYMUHEC3OY4XAQDQ'
+})
+
+.value('BIGOVEN_CREDENTIALS', {
+  REST_API_KEY: 'dvx43Atps4758n5988VoW6z1pRn1l33m'
 });

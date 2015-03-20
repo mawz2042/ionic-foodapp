@@ -347,7 +347,7 @@ angular.module('starter.controllers', [])
         };
     })
 
-    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, Alerts, $ionicPlatform, $ionicLoading, Loading, TDCardDelegate, Favourites, Foursquare, $cordovaGeolocation) {
+    .controller('DashCtrl', function($scope, $window, $http, $rootScope, $state, $ionicPopup, Alerts, $ionicPlatform, $ionicLoading, Loading, TDCardDelegate, Favourites, Foursquare, Bigoven) {
         // List of demand headings
         $rootScope.demandTitles = [
             "Go To",
@@ -423,6 +423,26 @@ angular.module('starter.controllers', [])
             });
         };
 
+        $rootScope.restaurantCards = [];
+        $scope.searchRecipes = function() {
+            Bigoven.getRecipes().success(function(data){
+                console.log(data);
+                angular.forEach(data.Results, function(value, key) {
+                    var rating = Math.round(value.StarRating * 100) / 100;
+                    $rootScope.restaurantCards.push({ 
+                        image: value.ImageURL120, 
+                        name: value.Title,
+                        category: value.Category,
+                        rating: rating,
+                        id: value.RecipeID
+                    });
+                });
+                $state.go('tab.list', {});
+            }).error(function(err) {
+                console.log("Error!");
+            });
+        };
+
         // TODO: REFACTOR THE FKING LONG FUNCTION
         //       Call for getting list of restaurants
         $scope.searchRestaurants = function() {
@@ -435,7 +455,6 @@ angular.module('starter.controllers', [])
                 console.log(data);
                 restaurantList = data.response.groups[0].items;
 
-                $rootScope.restaurantCards = [];
                 var saveObject = [];
                 angular.forEach(data.response.groups[0].items, function(value, key) {
                     var imageUrl;
